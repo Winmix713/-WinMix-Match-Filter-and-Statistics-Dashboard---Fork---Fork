@@ -1,0 +1,4732 @@
+```index.tsx
+import './index.css'
+import React from "react";
+import { render } from "react-dom";
+import { App } from "./App";
+
+render(<App />, document.getElementById("root"));
+
+```
+```App.tsx
+import React from 'react'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { Layout } from './components/layout/Layout'
+import { LeagueOverview } from './components/pages/LeagueOverview'
+import { TeamAnalysis } from './components/pages/TeamAnalysis'
+import { MatchPredictions } from './components/pages/MatchPredictions'
+import { TeamComparisonPage } from './components/pages/TeamComparisonPage'
+import { MatchHistoryPage } from './components/pages/MatchHistoryPage'
+export function App() {
+  return (
+    <BrowserRouter>
+      <div className="w-full min-h-screen bg-background text-text-primary">
+        <Layout>
+          <Routes>
+            <Route
+              path="/"
+              element={<Navigate to="/league-overview" replace />}
+            />
+            <Route path="/league-overview" element={<LeagueOverview />} />
+            <Route path="/team-analysis" element={<TeamAnalysis />} />
+            <Route path="/match-predictions" element={<MatchPredictions />} />
+            <Route path="/team-comparison" element={<TeamComparisonPage />} />
+            <Route path="/match-history" element={<MatchHistoryPage />} />
+          </Routes>
+        </Layout>
+      </div>
+    </BrowserRouter>
+  )
+}
+
+```
+```tailwind.config.js
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: [
+    "./src/**/*.{js,jsx,ts,tsx}",
+  ],
+  theme: {
+    extend: {
+      colors: {
+        background: {
+          DEFAULT: "var(--background)",
+          card: "var(--bg-card)",
+          hover: "var(--hover)"
+        },
+        text: {
+          primary: "var(--text-primary)",
+          secondary: "var(--text-secondary)",
+          tertiary: "var(--text-tertiary)"
+        },
+        border: "var(--border)",
+        accent: {
+          blue: "var(--accent-blue)",
+          green: "var(--accent-green)",
+          yellow: "var(--accent-yellow)",
+          red: "var(--accent-red)",
+          "blue-muted": "var(--accent-blue-muted)",
+          "green-muted": "var(--accent-green-muted)",
+          "yellow-muted": "var(--accent-yellow-muted)",
+          "red-muted": "var(--accent-red-muted)",
+        }
+      },
+      fontFamily: {
+        sans: [
+          '-apple-system',
+          'BlinkMacSystemFont',
+          '"Segoe UI"',
+          'Roboto',
+          'Oxygen',
+          'Ubuntu',
+          'Cantarell',
+          '"Fira Sans"',
+          '"Droid Sans"',
+          '"Helvetica Neue"',
+          'sans-serif',
+        ],
+      },
+    },
+  },
+  plugins: [],
+}
+```
+```index.css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Background colors */
+  --background: #0F0F10;
+  --bg-primary: #0F0F10;
+  --bg-card: #141415;
+  --hover: #1A1A1B;
+  --background-card: #141415;
+  --background-hover: #1A1A1B;
+  /* Text colors */
+  --text-primary: #FFFFFF;
+  --text-secondary: #9B9BA0;
+  --text-tertiary: #6B6B70;
+  /* Border colors */
+  --border: #232324;
+  --divider: #232324;
+  /* Accent colors */
+  --accent-blue: #2196F3;
+  --accent-green: #4CAF50;
+  --accent-yellow: #FFC107;
+  --accent-red: #F44336;
+  /* Muted accent colors */
+  --accent-blue-muted: rgba(33, 150, 243, 0.1);
+  --accent-green-muted: rgba(76, 175, 80, 0.1);
+  --accent-yellow-muted: rgba(255, 193, 7, 0.1);
+  --accent-red-muted: rgba(244, 67, 54, 0.1);
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--background);
+  color: var(--text-primary);
+}
+
+.card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.btn-primary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--accent-blue);
+  color: white;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.btn-primary:hover {
+  background-color: rgba(33, 150, 243, 0.9);
+}
+
+.btn-secondary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+.btn-secondary:hover {
+  background-color: var(--hover);
+  border-color: var(--text-tertiary);
+}
+
+.btn-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  color: var(--text-secondary);
+  border-radius: 8px;
+  padding: 8px;
+  transition: color 0.2s, background-color 0.2s;
+}
+
+.btn-icon:hover {
+  color: var(--text-primary);
+  background-color: var(--hover);
+}
+
+.input-search {
+  width: 100%;
+  height: 40px;
+  background-color: var(--background);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0 16px 0 36px;
+  color: var(--text-primary);
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.input-search:focus {
+  border-color: var(--accent-blue);
+}
+
+@layer components {
+  .accent-green-text {
+    color: var(--accent-green);
+  }
+  .accent-red-text {
+    color: var(--accent-red);
+  }
+  .accent-yellow-text {
+    color: var(--accent-yellow);
+  }
+  .accent-blue-text {
+    color: var(--accent-blue);
+  }
+}
+```
+```components/layout/Layout.tsx
+import React from 'react'
+import { Sidebar } from './Sidebar'
+import { Header } from './Header'
+interface LayoutProps {
+  children: React.ReactNode
+}
+export function Layout({ children }: LayoutProps) {
+  return (
+    <div className="flex min-h-screen bg-[var(--bg-primary)]">
+      <Sidebar />
+      <div className="flex-1">
+        <Header />
+        <main className="p-4 lg:p-6 overflow-auto">{children}</main>
+      </div>
+    </div>
+  )
+}
+
+```
+```components/layout/Sidebar.tsx
+import React from 'react'
+import { NavLink, useLocation } from 'react-router-dom'
+import {
+  BarChart,
+  Trophy,
+  TrendingUp,
+  Scale,
+  History,
+  Settings,
+  HelpCircle,
+  ChevronDown,
+  Plus,
+} from 'lucide-react'
+const NAVIGATION_ITEMS = [
+  {
+    icon: <BarChart size={16} />,
+    label: 'League Overview',
+    path: '/league-overview',
+  },
+  {
+    icon: <Trophy size={16} />,
+    label: 'Team Analysis',
+    path: '/team-analysis',
+  },
+  {
+    icon: <TrendingUp size={16} />,
+    label: 'Match Predictions',
+    path: '/match-predictions',
+  },
+  {
+    icon: <Scale size={16} />,
+    label: 'Team Comparison',
+    path: '/team-comparison',
+  },
+  {
+    icon: <History size={16} />,
+    label: 'Match History',
+    path: '/match-history',
+  },
+]
+export function Sidebar() {
+  const location = useLocation()
+  return (
+    <aside className="w-16 md:w-60 bg-background-card border-r border-border flex flex-col h-screen">
+      <div className="p-4 flex items-center justify-center md:justify-between border-b border-border">
+        <div className="w-8 h-8 rounded-full bg-accent-green flex items-center justify-center">
+          <span className="text-white text-xs font-bold">BT</span>
+        </div>
+        <button className="hidden md:flex items-center text-xs text-text-secondary">
+          BetTipster
+          <ChevronDown size={14} className="ml-1" />
+        </button>
+      </div>
+      <div className="flex-1 overflow-y-auto py-4">
+        <nav className="space-y-2 px-2">
+          {NAVIGATION_ITEMS.map((item, i) => (
+            <NavLink
+              key={i}
+              to={item.path}
+              className={({ isActive }) => `
+                flex items-center space-x-3 px-3 py-2 rounded-lg text-sm
+                transition-colors duration-200
+                ${isActive ? 'bg-background-hover text-text-primary' : 'text-text-secondary hover:bg-background-hover hover:text-text-primary'}
+              `}
+            >
+              <span className="flex-shrink-0">{item.icon}</span>
+              <span className="hidden md:inline truncate">{item.label}</span>
+            </NavLink>
+          ))}
+        </nav>
+      </div>
+      <div className="p-4 border-t border-border">
+        <div className="hidden md:flex items-center justify-between mb-4">
+          <div className="flex items-center space-x-2">
+            <div className="w-6 h-6 rounded-full bg-accent-blue"></div>
+            <span className="text-sm text-text-secondary">Pro Tipster</span>
+          </div>
+          <button className="text-text-secondary hover:text-text-primary transition-colors">
+            <Plus size={16} />
+          </button>
+        </div>
+        <div className="flex items-center justify-center md:justify-between">
+          <div className="flex items-center space-x-2">
+            <div className="w-8 h-8 rounded-full overflow-hidden ring-2 ring-border hover:ring-accent-blue transition-colors">
+              <img
+                src="https://uploadthingy.s3.us-west-1.amazonaws.com/u1YuLjfWUcXmvEcD5LE4eQ/image.png"
+                alt="Profile"
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <span className="hidden md:inline text-sm text-text-secondary">
+              John Doe
+            </span>
+          </div>
+          <div className="hidden md:flex space-x-2">
+            <button className="text-text-secondary hover:text-text-primary transition-colors p-1 rounded-md hover:bg-background-hover">
+              <Settings size={16} />
+            </button>
+            <button className="text-text-secondary hover:text-text-primary transition-colors p-1 rounded-md hover:bg-background-hover">
+              <HelpCircle size={16} />
+            </button>
+          </div>
+        </div>
+      </div>
+    </aside>
+  )
+}
+
+```
+```components/dashboard/Dashboard.tsx
+import React from 'react'
+import { DraggableDashboard } from './DraggableDashboard'
+export function Dashboard() {
+  return <DraggableDashboard />
+}
+
+```
+```components/dashboard/ProductGrid.tsx
+import React from 'react'
+import { ProductCard } from './ProductCard'
+const PRODUCTS = [
+  {
+    id: 1,
+    title: 'Sunset Road Scene',
+    image:
+      'https://uploadthingy.s3.us-west-1.amazonaws.com/c8E4AQCe4uVvMGPPxakuUt/slice-13_1742214339879.png',
+    selected: true,
+  },
+  {
+    id: 2,
+    title: 'Coastal Apartment',
+    image:
+      'https://uploadthingy.s3.us-west-1.amazonaws.com/83ttsJKV8er18r1zYy8eJJ/slice-14_1742214337283.png',
+    selected: true,
+  },
+  {
+    id: 3,
+    title: 'Orange Cube',
+    image:
+      'https://uploadthingy.s3.us-west-1.amazonaws.com/dWBh9AnRe9EoLsjSSaXDP4/slice-15_1742214334774.png',
+    selected: true,
+  },
+  {
+    id: 4,
+    title: 'Holographic Display',
+    image:
+      'https://uploadthingy.s3.us-west-1.amazonaws.com/rdnHR9HTUJPRb3VimXiY4G/slice-16_1742214332596.png',
+    selected: true,
+  },
+  {
+    id: 5,
+    title: 'Green 3D Objects',
+    image:
+      'https://uploadthingy.s3.us-west-1.amazonaws.com/mRkVZVCWHxxyGJBoc7g8ye/slice-17_1742214330704.png',
+    selected: true,
+  },
+  {
+    id: 6,
+    title: 'Sunset Mountains',
+    image:
+      'https://uploadthingy.s3.us-west-1.amazonaws.com/c8E4AQCe4uVvMGPPxakuUt/slice-13_1742214339879.png',
+    selected: false,
+  },
+]
+export function ProductGrid() {
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      {PRODUCTS.map((product) => (
+        <ProductCard key={product.id} product={product} />
+      ))}
+    </div>
+  )
+}
+
+```
+```components/dashboard/ProductCard.tsx
+import React from 'react'
+import { MoreHorizontal, Check } from 'lucide-react'
+interface ProductCardProps {
+  product: {
+    id: number
+    title: string
+    image: string
+    selected: boolean
+  }
+}
+export function ProductCard({ product }: ProductCardProps) {
+  return (
+    <div className="relative group">
+      {product.selected && (
+        <div className="absolute top-3 left-3 z-10 w-5 h-5 bg-white rounded-full flex items-center justify-center">
+          <Check size={12} className="text-black" />
+        </div>
+      )}
+      <div className="border border-[#232324] rounded-md overflow-hidden bg-[#141415] transition-all duration-200 hover:border-[#3E3E40]">
+        <div className="aspect-video relative overflow-hidden">
+          <img
+            src={product.image}
+            alt={product.title}
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+        </div>
+        <div className="p-3 flex justify-between items-center">
+          <div>
+            <h3 className="text-sm font-medium truncate">{product.title}</h3>
+            <p className="text-xs text-[#9B9BA0]">Draft</p>
+          </div>
+          <button className="opacity-0 group-hover:opacity-100 p-1 hover:bg-[#232324] rounded-md transition-all">
+            <MoreHorizontal size={16} className="text-[#9B9BA0]" />
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+```
+```components/dashboard/Overview.tsx
+import React from 'react'
+import { CustomerList } from './CustomerList'
+import { TrendingUp, Trophy, Target } from 'lucide-react'
+export function Overview() {
+  return (
+    <div className="space-y-6">
+      <h2 className="text-lg font-semibold">Betting Overview</h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="card">
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="text-[var(--text-secondary)]">Success Rate</h3>
+            <div className="px-2 py-1 bg-[rgba(76,175,80,0.1)] text-[var(--accent-green)] rounded text-xs flex items-center">
+              <TrendingUp className="w-3 h-3 mr-1" />
+              76.5%
+            </div>
+          </div>
+          <div className="flex items-baseline gap-2">
+            <span className="text-[32px] font-bold">183</span>
+            <span className="text-[13px] text-[var(--text-secondary)]">
+              winning tips
+            </span>
+          </div>
+          <div className="mt-8">
+            <p className="text-sm mb-4 text-[var(--text-secondary)]">
+              Last 5 tips were successful! 🔥
+            </p>
+            <div className="flex gap-2">
+              {[1, 1, 1, 1, 1].map((result, i) => (
+                <div
+                  key={i}
+                  className={`w-8 h-8 rounded-full flex items-center justify-center ${result === 1 ? 'bg-[rgba(76,175,80,0.1)] text-[var(--accent-green)]' : 'bg-[rgba(244,67,54,0.1)] text-[var(--accent-red)]'}`}
+                >
+                  {result === 1 ? '✓' : '×'}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+        <div className="card">
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="text-[var(--text-secondary)]">Today's Tips</h3>
+            <div className="px-2 py-1 bg-[rgba(255,193,7,0.1)] text-[var(--accent-yellow)] rounded text-xs flex items-center">
+              <Target className="w-3 h-3 mr-1" />8 matches
+            </div>
+          </div>
+          <div className="flex items-baseline gap-2">
+            <span className="text-[32px] font-bold">€1,450</span>
+            <span className="text-[13px] text-[var(--text-secondary)]">
+              potential profit
+            </span>
+          </div>
+          <div className="mt-4 flex items-center gap-4">
+            <div className="flex-1 h-2 bg-[var(--hover)] rounded-full overflow-hidden">
+              <div className="h-full w-[65%] bg-[var(--accent-green)] rounded-full" />
+            </div>
+            <span className="text-sm text-[var(--text-secondary)]">65%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+```
+```components/dashboard/CustomerList.tsx
+import React from 'react'
+const CUSTOMERS = [
+  {
+    name: 'Gladyce',
+    image:
+      'https://uploadthingy.s3.us-west-1.amazonaws.com/u1YuLjfWUcXmvEcD5LE4eQ/image.png',
+  },
+  {
+    name: 'Elbert',
+    image:
+      'https://uploadthingy.s3.us-west-1.amazonaws.com/u1YuLjfWUcXmvEcD5LE4eQ/image.png',
+  },
+  {
+    name: 'Joyce',
+    image:
+      'https://uploadthingy.s3.us-west-1.amazonaws.com/u1YuLjfWUcXmvEcD5LE4eQ/image.png',
+  },
+  {
+    name: 'John',
+    image:
+      'https://uploadthingy.s3.us-west-1.amazonaws.com/u1YuLjfWUcXmvEcD5LE4eQ/image.png',
+  },
+  {
+    name: 'Elbert',
+    image:
+      'https://uploadthingy.s3.us-west-1.amazonaws.com/u1YuLjfWUcXmvEcD5LE4eQ/image.png',
+  },
+  {
+    name: 'Joyce',
+    image:
+      'https://uploadthingy.s3.us-west-1.amazonaws.com/u1YuLjfWUcXmvEcD5LE4eQ/image.png',
+  },
+  {
+    name: 'Anna',
+    image:
+      'https://uploadthingy.s3.us-west-1.amazonaws.com/u1YuLjfWUcXmvEcD5LE4eQ/image.png',
+  },
+]
+export function CustomerList() {
+  return (
+    <div className="flex items-center">
+      <div className="flex -space-x-2">
+        {CUSTOMERS.slice(0, 6).map((customer, i) => (
+          <div
+            key={i}
+            className="w-8 h-8 rounded-full border-2 border-[#141415] overflow-hidden"
+          >
+            <img
+              src={customer.image}
+              alt={customer.name}
+              className="w-full h-full object-cover"
+            />
+          </div>
+        ))}
+      </div>
+      <button className="ml-2 text-sm text-[#9B9BA0] hover:text-white">
+        View all
+      </button>
+    </div>
+  )
+}
+
+```
+```components/dashboard/ProductView.tsx
+import React from 'react'
+import { AreaChart, Area, XAxis, Tooltip, ResponsiveContainer } from 'recharts'
+const data = [
+  {
+    name: 'Mon',
+    value: 2400,
+    profit: 240,
+  },
+  {
+    name: 'Tue',
+    value: 3600,
+    profit: 360,
+  },
+  {
+    name: 'Wed',
+    value: 1200,
+    profit: -120,
+  },
+  {
+    name: 'Thu',
+    value: 4800,
+    profit: 480,
+  },
+  {
+    name: 'Fri',
+    value: 3200,
+    profit: 320,
+  },
+  {
+    name: 'Sat',
+    value: 1600,
+    profit: -160,
+  },
+  {
+    name: 'Sun',
+    value: 3800,
+    profit: 380,
+  },
+]
+export function ProductView() {
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center justify-between">
+        <h2 className="text-xl font-medium">Betting Performance</h2>
+        <select className="bg-transparent text-sm text-[var(--text-secondary)] focus:outline-none">
+          <option>Last 7 days</option>
+          <option>Last 30 days</option>
+          <option>Last 90 days</option>
+        </select>
+      </div>
+      <div className="card p-6 h-[300px]">
+        <ResponsiveContainer width="100%" height="100%">
+          <AreaChart data={data}>
+            <defs>
+              <linearGradient id="gradient" x1="0" y1="0" x2="0" y2="1">
+                <stop
+                  offset="0%"
+                  stopColor="var(--accent-green)"
+                  stopOpacity={0.1}
+                />
+                <stop
+                  offset="100%"
+                  stopColor="var(--accent-green)"
+                  stopOpacity={0}
+                />
+              </linearGradient>
+            </defs>
+            <XAxis
+              dataKey="name"
+              axisLine={false}
+              tickLine={false}
+              tick={{
+                fill: 'var(--text-secondary)',
+                fontSize: 12,
+              }}
+            />
+            <Tooltip
+              contentStyle={{
+                background: 'var(--bg-card)',
+                border: '1px solid var(--divider)',
+                borderRadius: '8px',
+              }}
+              formatter={(value: any) => [`€${value}`, 'Profit']}
+            />
+            <Area
+              type="monotone"
+              dataKey="profit"
+              stroke="var(--accent-green)"
+              fill="url(#gradient)"
+              strokeWidth={2}
+            />
+          </AreaChart>
+        </ResponsiveContainer>
+      </div>
+    </div>
+  )
+}
+
+```
+```components/dashboard/PopularProducts.tsx
+import React from 'react'
+import { Trophy, Target } from 'lucide-react'
+const MATCHES = [
+  {
+    league: 'Premier League',
+    match: 'Arsenal vs Chelsea',
+    prediction: 'Home Win',
+    odds: '1.85',
+    confidence: 'High',
+    time: '20:45',
+  },
+  {
+    league: 'La Liga',
+    match: 'Barcelona vs Real Madrid',
+    prediction: 'Over 2.5',
+    odds: '1.95',
+    confidence: 'Medium',
+    time: '21:00',
+  },
+  {
+    league: 'Bundesliga',
+    match: 'Bayern vs Dortmund',
+    prediction: 'BTTS',
+    odds: '1.75',
+    confidence: 'High',
+    time: '19:30',
+  },
+  {
+    league: 'Serie A',
+    match: 'Inter vs Milan',
+    prediction: 'Draw',
+    odds: '3.20',
+    confidence: 'Medium',
+    time: '20:45',
+  },
+]
+export function PopularProducts() {
+  return (
+    <div className="space-y-4">
+      <h2 className="text-xl font-medium">Today's Top Tips</h2>
+      <div className="space-y-3">
+        {MATCHES.map((match, i) => (
+          <div
+            key={i}
+            className="card p-4 hover:border-[var(--accent-blue)] transition-colors cursor-pointer"
+          >
+            <div className="flex items-center gap-3 mb-3">
+              <Trophy className="w-4 h-4 text-[var(--accent-yellow)]" />
+              <span className="text-sm text-[var(--text-secondary)]">
+                {match.league}
+              </span>
+              <span className="ml-auto text-xs text-[var(--text-tertiary)]">
+                {match.time}
+              </span>
+            </div>
+            <h3 className="text-sm font-medium mb-2">{match.match}</h3>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Target className="w-4 h-4 text-[var(--accent-green)]" />
+                <span className="text-sm text-[var(--text-primary)]">
+                  {match.prediction}
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-xs px-2 py-1 rounded bg-[rgba(76,175,80,0.1)] text-[var(--accent-green)]">
+                  {match.odds}
+                </span>
+                <span className="text-xs px-2 py-1 rounded bg-[rgba(33,150,243,0.1)] text-[var(--accent-blue)]">
+                  {match.confidence}
+                </span>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+      <button className="btn-secondary w-full">View All Tips</button>
+    </div>
+  )
+}
+
+```
+```components/dashboard/Comments.tsx
+import React from 'react'
+const COMMENTS = [
+  {
+    user: {
+      name: 'Joyce',
+      image:
+        'https://uploadthingy.s3.us-west-1.amazonaws.com/u1YuLjfWUcXmvEcD5LE4eQ/image.png',
+    },
+    product: 'Bento Pro 2.0',
+    comment: 'Great work! When HTML version will be available? 🔥',
+    time: '2m ago',
+  },
+  {
+    user: {
+      name: 'Gladyce',
+      image:
+        'https://uploadthingy.s3.us-west-1.amazonaws.com/u1YuLjfWUcXmvEcD5LE4eQ/image.png',
+    },
+    product: 'Food Delivery App',
+    comment:
+      'Amazing. This says compatible with After Effects. Will After Effects lite be added?',
+    time: '15m ago',
+  },
+]
+export function Comments() {
+  return (
+    <div className="space-y-4">
+      <h2 className="text-xl font-medium">Comments</h2>
+      <div className="space-y-4">
+        {COMMENTS.map((comment, i) => (
+          <div
+            key={i}
+            className="p-4 bg-[#141415] rounded-lg border border-[#232324]"
+          >
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-8 h-8 rounded-full overflow-hidden">
+                <img
+                  src={comment.user.image}
+                  alt={comment.user.name}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div>
+                <div className="flex items-center gap-1">
+                  <span className="text-sm font-medium">
+                    {comment.user.name}
+                  </span>
+                  <span className="text-sm text-[#9B9BA0]">on</span>
+                  <span className="text-sm font-medium">{comment.product}</span>
+                </div>
+                <p className="text-xs text-[#9B9BA0]">{comment.time}</p>
+              </div>
+            </div>
+            <p className="text-sm">{comment.comment}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+```
+```components/layout/Header.tsx
+import React from 'react'
+import { useLocation } from 'react-router-dom'
+import { Search, Plus, Bell } from 'lucide-react'
+const PAGE_TITLES: Record<string, string> = {
+  '/league-overview': 'League Overview',
+  '/team-analysis': 'Team Analysis',
+  '/match-predictions': 'Match Predictions',
+  '/team-comparison': 'Team Comparison',
+  '/match-history': 'Match History',
+}
+export function Header() {
+  const location = useLocation()
+  const title = PAGE_TITLES[location.pathname] || 'League Overview'
+  return (
+    <header className="sticky top-0 z-20 flex items-center h-16 px-6 bg-background-card border-b border-border">
+      <h1 className="mr-auto text-lg font-semibold max-md:hidden">{title}</h1>
+      <div className="flex items-center gap-4">
+        <div className="relative w-[320px] max-lg:hidden">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-text-tertiary" />
+          <input
+            type="text"
+            placeholder="Search anything..."
+            className="w-full h-10 pl-10 pr-4 bg-background border border-border rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-accent-blue"
+          />
+        </div>
+        <button className="relative p-2 text-text-secondary hover:text-text-primary hover:bg-background-hover rounded-lg transition-colors">
+          <Bell className="w-5 h-5" />
+          <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-accent-red rounded-full" />
+        </button>
+        <button className="flex items-center px-3 py-2 bg-accent-blue hover:bg-accent-blue/90 text-white rounded-lg text-sm transition-colors">
+          <Plus className="w-4 h-4 mr-2" />
+          Create
+        </button>
+        <button className="w-10 h-10 rounded-full overflow-hidden ring-2 ring-border hover:ring-accent-blue transition-all">
+          <img
+            src="https://uploadthingy.s3.us-west-1.amazonaws.com/u1YuLjfWUcXmvEcD5LE4eQ/image.png"
+            alt="Profile"
+            className="w-full h-full object-cover"
+          />
+        </button>
+      </div>
+    </header>
+  )
+}
+
+```
+```components/matches/LiveScores.tsx
+import React from 'react'
+import { Clock, Activity } from 'lucide-react'
+const LIVE_MATCHES = [
+  {
+    league: 'Premier League',
+    homeTeam: 'Liverpool',
+    awayTeam: 'Manchester City',
+    homeScore: 2,
+    awayScore: 1,
+    minute: 67,
+    status: 'LIVE',
+  },
+  // ... több meccs
+]
+export function LiveScores() {
+  return (
+    <div className="card">
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-lg font-semibold flex items-center gap-2">
+          <Activity className="w-4 h-4 text-[var(--accent-red)]" />
+          Live Matches
+        </h2>
+      </div>
+      <div className="space-y-3">
+        {LIVE_MATCHES.map((match, i) => (
+          <div
+            key={i}
+            className="flex items-center justify-between p-3 border border-[var(--divider)] rounded-lg"
+          >
+            <div className="flex items-center gap-3">
+              <div className="flex flex-col items-center justify-center w-12">
+                <Clock className="w-4 h-4 text-[var(--accent-green)]" />
+                <span className="text-xs text-[var(--text-secondary)]">
+                  {match.minute}'
+                </span>
+              </div>
+              <div>
+                <div className="text-sm font-medium">{match.homeTeam}</div>
+                <div className="text-sm font-medium">{match.awayTeam}</div>
+              </div>
+            </div>
+            <div className="flex items-center gap-4">
+              <div className="text-lg font-bold">
+                {match.homeScore} - {match.awayScore}
+              </div>
+              <div className="px-2 py-1 bg-[rgba(244,67,54,0.1)] rounded">
+                <span className="text-xs text-[var(--accent-red)]">LIVE</span>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+```
+```components/stats/BettingHistory.tsx
+import React from 'react'
+import { Calendar, TrendingUp, TrendingDown } from 'lucide-react'
+export function BettingHistory() {
+  return (
+    <div className="card">
+      <h2 className="text-lg font-semibold mb-4">Betting History</h2>
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <div className="w-10 h-10 rounded-full bg-[rgba(76,175,80,0.1)] flex items-center justify-center">
+              <TrendingUp className="w-5 h-5 text-[var(--accent-green)]" />
+            </div>
+            <div>
+              <div className="text-sm font-medium">Arsenal vs Chelsea</div>
+              <div className="text-xs text-[var(--text-secondary)]">
+                Home Win @1.85
+              </div>
+            </div>
+          </div>
+          <div className="text-[var(--accent-green)]">+€85.00</div>
+        </div>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <div className="w-10 h-10 rounded-full bg-[rgba(244,67,54,0.1)] flex items-center justify-center">
+              <TrendingDown className="w-5 h-5 text-[var(--accent-red)]" />
+            </div>
+            <div>
+              <div className="text-sm font-medium">Bayern vs Dortmund</div>
+              <div className="text-xs text-[var(--text-secondary)]">
+                Over 2.5 @1.95
+              </div>
+            </div>
+          </div>
+          <div className="text-[var(--accent-red)]">-€50.00</div>
+        </div>
+      </div>
+      <button className="btn-secondary w-full mt-4">View All History</button>
+    </div>
+  )
+}
+
+```
+```components/community/TipsterRanking.tsx
+import React from 'react'
+import { Trophy, Star, Award } from 'lucide-react'
+const TIPSTERS = [
+  {
+    name: 'John Smith',
+    winRate: '78%',
+    profit: '€2,450',
+    rank: 1,
+    verified: true,
+  },
+  // ... több tipster
+]
+export function TipsterRanking() {
+  return (
+    <div className="card">
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-lg font-semibold">Top Tipsters</h2>
+        <button className="btn-secondary text-sm">This Month</button>
+      </div>
+      <div className="space-y-4">
+        {TIPSTERS.map((tipster, i) => (
+          <div
+            key={i}
+            className="flex items-center justify-between p-3 border border-[var(--divider)] rounded-lg"
+          >
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-full bg-[rgba(255,193,7,0.1)] flex items-center justify-center">
+                {tipster.rank === 1 ? (
+                  <Trophy className="w-4 h-4 text-[var(--accent-yellow)]" />
+                ) : (
+                  <span className="text-sm text-[var(--text-secondary)]">
+                    #{tipster.rank}
+                  </span>
+                )}
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-medium">{tipster.name}</span>
+                  {tipster.verified && (
+                    <Star className="w-4 h-4 text-[var(--accent-blue)]" />
+                  )}
+                </div>
+                <div className="text-xs text-[var(--text-secondary)]">
+                  Win Rate: {tipster.winRate}
+                </div>
+              </div>
+            </div>
+            <div className="text-[var(--accent-green)]">{tipster.profit}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+```
+```services/websocket.ts
+// Mock WebSocket service for the application
+type Callback = (data: any) => void
+class WebSocketService {
+  private subscriptions: Record<string, Callback[]> = {}
+  private mockData: Record<string, any> = {
+    matchUpdate: {
+      id: 'match1',
+      homeTeam: 'Barcelona',
+      awayTeam: 'Madrid Fehér',
+      homeScore: 2,
+      awayScore: 1,
+      minute: 67,
+      events: [
+        {
+          minute: 23,
+          team: 'home',
+          event: 'Goal',
+          player: 'Lewandowski',
+        },
+        {
+          minute: 41,
+          team: 'away',
+          event: 'Goal',
+          player: 'Bellingham',
+        },
+        {
+          minute: 67,
+          team: 'home',
+          event: 'Goal',
+          player: 'Pedri',
+        },
+      ],
+    },
+  }
+  constructor() {
+    // Mock WebSocket connection
+    console.info('WebSocket service initialized')
+  }
+  public subscribe(event: string, callback: Callback): void {
+    if (!this.subscriptions[event]) {
+      this.subscriptions[event] = []
+    }
+    this.subscriptions[event].push(callback)
+    // Immediately trigger callback with mock data if available
+    if (this.mockData[event]) {
+      setTimeout(() => callback(this.mockData[event]), 500)
+    }
+  }
+  public unsubscribe(event: string): void {
+    delete this.subscriptions[event]
+  }
+  public publish(event: string, data: any): void {
+    if (!this.subscriptions[event]) return
+    this.subscriptions[event].forEach((callback) => {
+      callback(data)
+    })
+  }
+}
+export const webSocketService = new WebSocketService()
+
+```
+```components/dashboard/DraggableDashboard.tsx
+import React, { useState } from 'react'
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
+import { Overview } from './Overview'
+import { ProductView } from './ProductView'
+import { PopularProducts } from './PopularProducts'
+import { Comments } from './Comments'
+import { LiveScores } from '../matches/LiveScores'
+import { BettingHistory } from '../stats/BettingHistory'
+import { TipsterRanking } from '../community/TipsterRanking'
+interface Widget {
+  id: string
+  title: string
+  component: React.ReactNode
+  width: 'full' | 'half' | 'third'
+}
+const defaultWidgets: Widget[] = [
+  {
+    id: 'overview',
+    title: 'Overview',
+    component: <Overview />,
+    width: 'half',
+  },
+  {
+    id: 'live-scores',
+    title: 'Live Scores',
+    component: <LiveScores />,
+    width: 'half',
+  },
+  {
+    id: 'performance',
+    title: 'Performance',
+    component: <ProductView />,
+    width: 'full',
+  },
+  {
+    id: 'tips',
+    title: "Today's Tips",
+    component: <PopularProducts />,
+    width: 'third',
+  },
+  {
+    id: 'history',
+    title: 'History',
+    component: <BettingHistory />,
+    width: 'third',
+  },
+  {
+    id: 'tipsters',
+    title: 'Top Tipsters',
+    component: <TipsterRanking />,
+    width: 'third',
+  },
+]
+export function DraggableDashboard() {
+  const [widgets, setWidgets] = useState(defaultWidgets)
+  const handleDragEnd = (result: any) => {
+    if (!result.destination) return
+    const items = Array.from(widgets)
+    const [reorderedItem] = items.splice(result.source.index, 1)
+    items.splice(result.destination.index, 0, reorderedItem)
+    setWidgets(items)
+    // Save layout to localStorage or backend
+    localStorage.setItem('dashboardLayout', JSON.stringify(items))
+  }
+  return (
+    <DragDropContext onDragEnd={handleDragEnd}>
+      <Droppable droppableId="dashboard">
+        {(provided) => (
+          <div
+            {...provided.droppableProps}
+            ref={provided.innerRef}
+            className="grid grid-cols-1 lg:grid-cols-3 gap-6"
+          >
+            {widgets.map((widget, index) => (
+              <Draggable key={widget.id} draggableId={widget.id} index={index}>
+                {(provided) => (
+                  <div
+                    ref={provided.innerRef}
+                    {...provided.draggableProps}
+                    className={`
+                      ${widget.width === 'full' ? 'col-span-3' : ''}
+                      ${widget.width === 'half' ? 'col-span-3 lg:col-span-2' : ''}
+                      ${widget.width === 'third' ? 'col-span-3 lg:col-span-1' : ''}
+                    `}
+                  >
+                    <div className="group relative">
+                      <div
+                        {...provided.dragHandleProps}
+                        className="absolute top-2 right-2 p-2 rounded-lg bg-[var(--bg-card)] opacity-0 group-hover:opacity-100 transition-opacity cursor-move"
+                      >
+                        ⋮
+                      </div>
+                      {widget.component}
+                    </div>
+                  </div>
+                )}
+              </Draggable>
+            ))}
+            {provided.placeholder}
+          </div>
+        )}
+      </Droppable>
+    </DragDropContext>
+  )
+}
+
+```
+```components/matches/LiveMatch.tsx
+import React, { useEffect, useState } from 'react'
+import { webSocketService } from '../../services/websocket'
+import { Activity, Clock } from 'lucide-react'
+interface MatchEvent {
+  type: 'GOAL' | 'CARD' | 'SUBSTITUTION'
+  minute: number
+  team: 'home' | 'away'
+  description: string
+}
+interface LiveMatchProps {
+  matchId: string
+}
+export function LiveMatch({ matchId }: LiveMatchProps) {
+  const [matchData, setMatchData] = useState<any>(null)
+  const [events, setEvents] = useState<MatchEvent[]>([])
+  useEffect(() => {
+    webSocketService.subscribe('matchUpdate', (data) => {
+      if (data.id === matchId) {
+        setMatchData(data)
+        setEvents(data.events)
+      }
+    })
+    return () => {
+      webSocketService.unsubscribe('matchUpdate')
+    }
+  }, [matchId])
+  if (!matchData) return null
+  return (
+    <div className="card p-4">
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-2">
+          <Activity className="w-4 h-4 text-[var(--accent-red)]" />
+          <span className="text-sm font-medium">LIVE</span>
+          <Clock className="w-4 h-4 ml-2" />
+          <span className="text-sm">{matchData.minute}'</span>
+        </div>
+        <div className="px-2 py-1 bg-[rgba(244,67,54,0.1)] rounded">
+          <span className="text-xs text-[var(--accent-red)]">LIVE</span>
+        </div>
+      </div>
+      <div className="flex justify-between items-center mb-4">
+        <div className="text-lg font-medium">{matchData.homeTeam}</div>
+        <div className="text-2xl font-bold">
+          {matchData.homeScore} - {matchData.awayScore}
+        </div>
+        <div className="text-lg font-medium">{matchData.awayTeam}</div>
+      </div>
+      <div className="space-y-2">
+        {events.map((event, i) => (
+          <div key={i} className="flex items-center gap-2 text-sm">
+            <span className="text-[var(--text-secondary)]">
+              {event.minute}'
+            </span>
+            <span>{event.description}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+```
+```components/leagues/Leagues.tsx
+import React from 'react'
+import { VirtualLeagueAnalysis } from '../virtualLeague/VirtualLeagueAnalysis'
+export function Leagues() {
+  return (
+    <div className="space-y-6">
+      <VirtualLeagueAnalysis />
+    </div>
+  )
+}
+
+```
+```components/matches/Matches.tsx
+import React from 'react'
+import { LiveScores } from './LiveScores'
+export function Matches() {
+  return (
+    <div className="space-y-6">
+      <h2 className="text-lg font-semibold">Matches</h2>
+      <LiveScores />
+    </div>
+  )
+}
+
+```
+```components/stats/Statistics.tsx
+import React from 'react'
+import { ProductView } from '../dashboard/ProductView'
+import { BettingHistory } from './BettingHistory'
+export function Statistics() {
+  return (
+    <div className="space-y-6">
+      <h2 className="text-lg font-semibold">Statistics</h2>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-2">
+          <ProductView />
+        </div>
+        <div>
+          <BettingHistory />
+        </div>
+      </div>
+    </div>
+  )
+}
+
+```
+```components/tipsters/Tipsters.tsx
+import React from 'react'
+import { TipsterRanking } from '../community/TipsterRanking'
+export function Tipsters() {
+  return (
+    <div className="space-y-6">
+      <h2 className="text-lg font-semibold">Tipsters</h2>
+      <TipsterRanking />
+    </div>
+  )
+}
+
+```
+```components/vip/VIPTips.tsx
+import React from 'react'
+export function VIPTips() {
+  return (
+    <div className="space-y-6">
+      <h2 className="text-lg font-semibold">VIP Tips</h2>
+      {/* VIP content will go here */}
+    </div>
+  )
+}
+
+```
+```components/virtualLeague/VirtualLeagueAnalysis.tsx
+import React, { useState } from 'react'
+import {
+  BarChart,
+  Activity,
+  TrendingUp,
+  ChevronDown,
+  Filter,
+  Calendar,
+  Trophy,
+  Scale,
+  History,
+} from 'lucide-react'
+import { TeamStatsTable } from './TeamStatsTable'
+import { MatchPrediction } from './MatchPrediction'
+import { TeamPerformanceChart } from './TeamPerformanceChart'
+import { UpcomingMatches } from './UpcomingMatches'
+import { MatchAnalysis } from './MatchAnalysis'
+import { TeamComparison } from './TeamComparison'
+export function VirtualLeagueAnalysis() {
+  const [activeTab, setActiveTab] = useState('overview')
+  return (
+    <div className="space-y-6">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <h2 className="text-xl font-semibold flex items-center gap-2">
+          <Trophy className="w-5 h-5 text-accent-yellow" />
+          Virtual La Liga Analysis
+        </h2>
+        <div className="flex items-center gap-3">
+          <button className="btn-secondary">
+            <Calendar className="w-4 h-4 mr-2" />
+            Season 2023/24
+            <ChevronDown className="w-4 h-4 ml-2" />
+          </button>
+          <button className="btn-secondary">
+            <Filter className="w-4 h-4 mr-2" />
+            Filter
+          </button>
+        </div>
+      </div>
+      <div className="border-b border-border">
+        <nav className="flex overflow-x-auto">
+          <button
+            onClick={() => setActiveTab('overview')}
+            className={`px-4 py-2 border-b-2 font-medium text-sm whitespace-nowrap ${activeTab === 'overview' ? 'border-accent-green text-text-primary' : 'border-transparent text-text-secondary hover:text-text-primary'}`}
+          >
+            League Overview
+          </button>
+          <button
+            onClick={() => setActiveTab('teams')}
+            className={`px-4 py-2 border-b-2 font-medium text-sm whitespace-nowrap ${activeTab === 'teams' ? 'border-accent-green text-text-primary' : 'border-transparent text-text-secondary hover:text-text-primary'}`}
+          >
+            Team Analysis
+          </button>
+          <button
+            onClick={() => setActiveTab('predictions')}
+            className={`px-4 py-2 border-b-2 font-medium text-sm whitespace-nowrap ${activeTab === 'predictions' ? 'border-accent-green text-text-primary' : 'border-transparent text-text-secondary hover:text-text-primary'}`}
+          >
+            Match Predictions
+          </button>
+          <button
+            onClick={() => setActiveTab('comparison')}
+            className={`px-4 py-2 border-b-2 font-medium text-sm whitespace-nowrap ${activeTab === 'comparison' ? 'border-accent-green text-text-primary' : 'border-transparent text-text-secondary hover:text-text-primary'}`}
+          >
+            Team Comparison
+          </button>
+          <button
+            onClick={() => setActiveTab('history')}
+            className={`px-4 py-2 border-b-2 font-medium text-sm whitespace-nowrap ${activeTab === 'history' ? 'border-accent-green text-text-primary' : 'border-transparent text-text-secondary hover:text-text-primary'}`}
+          >
+            Match History
+          </button>
+        </nav>
+      </div>
+      {activeTab === 'overview' && (
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-2">
+            <div className="card">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-medium">League Table</h3>
+                <button className="btn-secondary text-sm py-1">
+                  <BarChart className="w-4 h-4 mr-2" />
+                  View Stats
+                </button>
+              </div>
+              <TeamStatsTable />
+            </div>
+          </div>
+          <div className="lg:col-span-1">
+            <div className="card mb-6">
+              <h3 className="text-lg font-medium mb-4">League Statistics</h3>
+              <div className="space-y-4">
+                <div>
+                  <div className="flex items-center justify-between text-sm mb-1">
+                    <span className="text-text-secondary">
+                      Average Goals per Match
+                    </span>
+                    <span className="font-medium">2.7</span>
+                  </div>
+                  <div className="h-2 bg-background-hover rounded-full overflow-hidden">
+                    <div className="h-full w-[67%] bg-accent-blue rounded-full" />
+                  </div>
+                </div>
+                <div>
+                  <div className="flex items-center justify-between text-sm mb-1">
+                    <span className="text-text-secondary">Home Win Rate</span>
+                    <span className="font-medium">48%</span>
+                  </div>
+                  <div className="h-2 bg-background-hover rounded-full overflow-hidden">
+                    <div className="h-full w-[48%] bg-accent-green rounded-full" />
+                  </div>
+                </div>
+                <div>
+                  <div className="flex items-center justify-between text-sm mb-1">
+                    <span className="text-text-secondary">Draw Rate</span>
+                    <span className="font-medium">24%</span>
+                  </div>
+                  <div className="h-2 bg-background-hover rounded-full overflow-hidden">
+                    <div className="h-full w-[24%] bg-accent-yellow rounded-full" />
+                  </div>
+                </div>
+                <div>
+                  <div className="flex items-center justify-between text-sm mb-1">
+                    <span className="text-text-secondary">Away Win Rate</span>
+                    <span className="font-medium">28%</span>
+                  </div>
+                  <div className="h-2 bg-background-hover rounded-full overflow-hidden">
+                    <div className="h-full w-[28%] bg-accent-red rounded-full" />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="card">
+              <h3 className="text-lg font-medium mb-4">Simulation Model</h3>
+              <div className="space-y-4">
+                <div className="p-3 border border-border rounded-lg">
+                  <h4 className="font-medium mb-1">Poisson Distribution</h4>
+                  <p className="text-sm text-text-secondary">
+                    Predicts the number of goals scored by each team based on
+                    their average scoring rate
+                  </p>
+                </div>
+                <div className="p-3 border border-border rounded-lg">
+                  <h4 className="font-medium mb-1">Bayesian Probability</h4>
+                  <p className="text-sm text-text-secondary">
+                    Calculates match outcomes based on historical head-to-head
+                    results
+                  </p>
+                </div>
+                <div className="p-3 border border-border rounded-lg">
+                  <h4 className="font-medium mb-1">Half-time Analysis</h4>
+                  <p className="text-sm text-text-secondary">
+                    Uses half-time scores to predict final match outcomes
+                  </p>
+                </div>
+                <button className="btn-secondary w-full">
+                  <TrendingUp className="w-4 h-4 mr-2" />
+                  View Model Details
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      {activeTab === 'teams' && (
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-2">
+            <div className="card">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-medium">Team Performance</h3>
+                <div className="relative w-[200px]">
+                  <select className="w-full bg-background border border-border rounded-lg px-3 py-2 text-sm appearance-none focus:outline-none focus:border-accent-blue">
+                    <option>All Teams</option>
+                    <option>Barcelona</option>
+                    <option>Madrid Fehér</option>
+                    <option>Girona</option>
+                    <option>Madrid Piros</option>
+                  </select>
+                  <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-tertiary pointer-events-none" />
+                </div>
+              </div>
+              <TeamPerformanceChart />
+            </div>
+          </div>
+          <div className="lg:col-span-1">
+            <div className="card">
+              <h3 className="text-lg font-medium mb-4">Team Patterns</h3>
+              <div className="space-y-4">
+                <div className="p-3 border border-border rounded-lg">
+                  <div className="flex items-center gap-2 mb-2">
+                    <TrendingUp className="w-4 h-4 text-accent-green" />
+                    <h4 className="font-medium">Momentum Teams</h4>
+                  </div>
+                  <ul className="text-sm text-text-secondary space-y-1">
+                    <li className="flex items-center justify-between">
+                      <span>Barcelona</span>
+                      <span className="text-accent-green">5 win streak</span>
+                    </li>
+                    <li className="flex items-center justify-between">
+                      <span>Girona</span>
+                      <span className="text-accent-green">3 win streak</span>
+                    </li>
+                  </ul>
+                </div>
+                <div className="p-3 border border-border rounded-lg">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Scale className="w-4 h-4 text-accent-yellow" />
+                    <h4 className="font-medium">Draw Specialists</h4>
+                  </div>
+                  <ul className="text-sm text-text-secondary space-y-1">
+                    <li className="flex items-center justify-between">
+                      <span>San Sebastian</span>
+                      <span>40% draw rate</span>
+                    </li>
+                    <li className="flex items-center justify-between">
+                      <span>Sevilla Piros</span>
+                      <span>40% draw rate</span>
+                    </li>
+                  </ul>
+                </div>
+                <div className="p-3 border border-border rounded-lg">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Activity className="w-4 h-4 text-accent-blue" />
+                    <h4 className="font-medium">Half-time Teams</h4>
+                  </div>
+                  <ul className="text-sm text-text-secondary space-y-1">
+                    <li className="flex items-center justify-between">
+                      <span>Barcelona</span>
+                      <span className="text-accent-blue">Strong 1st half</span>
+                    </li>
+                    <li className="flex items-center justify-between">
+                      <span>Girona</span>
+                      <span className="text-accent-green">Strong 2nd half</span>
+                    </li>
+                  </ul>
+                </div>
+                <div className="p-3 border border-border rounded-lg">
+                  <div className="flex items-center gap-2 mb-2">
+                    <History className="w-4 h-4 text-accent-red" />
+                    <h4 className="font-medium">Thriller Factor</h4>
+                  </div>
+                  <ul className="text-sm text-text-secondary space-y-1">
+                    <li className="flex items-center justify-between">
+                      <span>Barcelona</span>
+                      <span>3.4 goals/match</span>
+                    </li>
+                    <li className="flex items-center justify-between">
+                      <span>Villarreal</span>
+                      <span>3.2 goals/match</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      {activeTab === 'predictions' && (
+        <div className="space-y-6">
+          <div className="card">
+            <h3 className="text-lg font-medium mb-4">Next Match Prediction</h3>
+            <MatchPrediction
+              team1="Barcelona"
+              team2="Madrid Fehér"
+              team1Win={45}
+              draw={30}
+              team2Win={25}
+              predictedScore="2-1"
+            />
+          </div>
+          <div className="card">
+            <h3 className="text-lg font-medium mb-4">Upcoming Matches</h3>
+            <UpcomingMatches />
+          </div>
+        </div>
+      )}
+      {activeTab === 'comparison' && <TeamComparison />}
+      {activeTab === 'history' && <MatchAnalysis />}
+    </div>
+  )
+}
+
+```
+```components/virtualLeague/TeamStatsTable.tsx
+import React, { useState } from 'react'
+import { TrendingUp, TrendingDown, Minus } from 'lucide-react'
+// Updated Spanish team data
+const teams = [
+  {
+    id: 1,
+    name: 'Barcelona',
+    matches: 10,
+    wins: 7,
+    draws: 2,
+    losses: 1,
+    goalsFor: 22,
+    goalsAgainst: 8,
+    goalDifference: 14,
+    points: 23,
+    form: ['W', 'W', 'D', 'W', 'W'],
+    secondHalfPerformance: '+5',
+    comebackAbility: 'High',
+    leadProtection: '85%',
+  },
+  {
+    id: 2,
+    name: 'Madrid Fehér',
+    matches: 10,
+    wins: 7,
+    draws: 1,
+    losses: 2,
+    goalsFor: 19,
+    goalsAgainst: 7,
+    goalDifference: 12,
+    points: 22,
+    form: ['W', 'L', 'W', 'W', 'W'],
+    secondHalfPerformance: '+3',
+    comebackAbility: 'Medium',
+    leadProtection: '90%',
+  },
+  {
+    id: 3,
+    name: 'Girona',
+    matches: 10,
+    wins: 6,
+    draws: 2,
+    losses: 2,
+    goalsFor: 18,
+    goalsAgainst: 12,
+    goalDifference: 6,
+    points: 20,
+    form: ['L', 'W', 'W', 'D', 'W'],
+    secondHalfPerformance: '+7',
+    comebackAbility: 'High',
+    leadProtection: '70%',
+  },
+  {
+    id: 4,
+    name: 'Madrid Piros',
+    matches: 10,
+    wins: 5,
+    draws: 3,
+    losses: 2,
+    goalsFor: 16,
+    goalsAgainst: 10,
+    goalDifference: 6,
+    points: 18,
+    form: ['D', 'D', 'W', 'W', 'W'],
+    secondHalfPerformance: '+2',
+    comebackAbility: 'Medium',
+    leadProtection: '75%',
+  },
+  {
+    id: 5,
+    name: 'Bilbao',
+    matches: 10,
+    wins: 5,
+    draws: 2,
+    losses: 3,
+    goalsFor: 15,
+    goalsAgainst: 11,
+    goalDifference: 4,
+    points: 17,
+    form: ['D', 'L', 'W', 'W', 'W'],
+    secondHalfPerformance: '+1',
+    comebackAbility: 'Medium',
+    leadProtection: '80%',
+  },
+  {
+    id: 6,
+    name: 'San Sebastian',
+    matches: 10,
+    wins: 4,
+    draws: 4,
+    losses: 2,
+    goalsFor: 13,
+    goalsAgainst: 10,
+    goalDifference: 3,
+    points: 16,
+    form: ['D', 'W', 'D', 'W', 'D'],
+    secondHalfPerformance: '-1',
+    comebackAbility: 'Low',
+    leadProtection: '65%',
+  },
+  {
+    id: 7,
+    name: 'Villarreal',
+    matches: 10,
+    wins: 4,
+    draws: 3,
+    losses: 3,
+    goalsFor: 16,
+    goalsAgainst: 14,
+    goalDifference: 2,
+    points: 15,
+    form: ['W', 'L', 'D', 'W', 'D'],
+    secondHalfPerformance: '+4',
+    comebackAbility: 'High',
+    leadProtection: '60%',
+  },
+  {
+    id: 8,
+    name: 'Valencia',
+    matches: 10,
+    wins: 4,
+    draws: 2,
+    losses: 4,
+    goalsFor: 12,
+    goalsAgainst: 11,
+    goalDifference: 1,
+    points: 14,
+    form: ['L', 'W', 'L', 'W', 'W'],
+    secondHalfPerformance: '+0',
+    comebackAbility: 'Medium',
+    leadProtection: '70%',
+  },
+  {
+    id: 9,
+    name: 'Sevilla Piros',
+    matches: 10,
+    wins: 3,
+    draws: 4,
+    losses: 3,
+    goalsFor: 11,
+    goalsAgainst: 11,
+    goalDifference: 0,
+    points: 13,
+    form: ['D', 'W', 'D', 'L', 'D'],
+    secondHalfPerformance: '-2',
+    comebackAbility: 'Low',
+    leadProtection: '75%',
+  },
+  {
+    id: 10,
+    name: 'Mallorca',
+    matches: 10,
+    wins: 3,
+    draws: 3,
+    losses: 4,
+    goalsFor: 9,
+    goalsAgainst: 10,
+    goalDifference: -1,
+    points: 12,
+    form: ['D', 'L', 'W', 'D', 'L'],
+    secondHalfPerformance: '-3',
+    comebackAbility: 'Low',
+    leadProtection: '55%',
+  },
+  {
+    id: 11,
+    name: 'Getafe',
+    matches: 10,
+    wins: 3,
+    draws: 3,
+    losses: 4,
+    goalsFor: 10,
+    goalsAgainst: 12,
+    goalDifference: -2,
+    points: 12,
+    form: ['L', 'D', 'W', 'L', 'W'],
+    secondHalfPerformance: '+1',
+    comebackAbility: 'Medium',
+    leadProtection: '60%',
+  },
+  {
+    id: 12,
+    name: 'Osasuna',
+    matches: 10,
+    wins: 3,
+    draws: 2,
+    losses: 5,
+    goalsFor: 12,
+    goalsAgainst: 15,
+    goalDifference: -3,
+    points: 11,
+    form: ['L', 'W', 'L', 'D', 'L'],
+    secondHalfPerformance: '-2',
+    comebackAbility: 'Low',
+    leadProtection: '50%',
+  },
+  {
+    id: 13,
+    name: 'Vigo',
+    matches: 10,
+    wins: 3,
+    draws: 1,
+    losses: 6,
+    goalsFor: 11,
+    goalsAgainst: 16,
+    goalDifference: -5,
+    points: 10,
+    form: ['L', 'L', 'W', 'L', 'W'],
+    secondHalfPerformance: '-4',
+    comebackAbility: 'Medium',
+    leadProtection: '45%',
+  },
+  {
+    id: 14,
+    name: 'Sevilla Zöld',
+    matches: 10,
+    wins: 2,
+    draws: 3,
+    losses: 5,
+    goalsFor: 9,
+    goalsAgainst: 15,
+    goalDifference: -6,
+    points: 9,
+    form: ['D', 'L', 'L', 'D', 'L'],
+    secondHalfPerformance: '-5',
+    comebackAbility: 'Low',
+    leadProtection: '40%',
+  },
+  {
+    id: 15,
+    name: 'Alaves',
+    matches: 10,
+    wins: 2,
+    draws: 2,
+    losses: 6,
+    goalsFor: 8,
+    goalsAgainst: 17,
+    goalDifference: -9,
+    points: 8,
+    form: ['L', 'L', 'D', 'L', 'W'],
+    secondHalfPerformance: '-6',
+    comebackAbility: 'Low',
+    leadProtection: '35%',
+  },
+  {
+    id: 16,
+    name: 'Las Palmas',
+    matches: 10,
+    wins: 1,
+    draws: 3,
+    losses: 6,
+    goalsFor: 7,
+    goalsAgainst: 16,
+    goalDifference: -9,
+    points: 6,
+    form: ['L', 'D', 'L', 'L', 'D'],
+    secondHalfPerformance: '-7',
+    comebackAbility: 'Very Low',
+    leadProtection: '30%',
+  },
+]
+export function TeamStatsTable() {
+  const [showAdvanced, setShowAdvanced] = useState(false)
+  return (
+    <div className="space-y-4">
+      <div className="flex justify-end mb-2">
+        <button
+          onClick={() => setShowAdvanced(!showAdvanced)}
+          className="text-sm text-accent-blue hover:underline flex items-center"
+        >
+          {showAdvanced ? 'Hide' : 'Show'} Advanced Stats
+        </button>
+      </div>
+      <div className="overflow-x-auto">
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="border-b border-border">
+              <th className="py-3 px-4 text-left font-medium text-text-secondary">
+                #
+              </th>
+              <th className="py-3 px-4 text-left font-medium text-text-secondary">
+                Team
+              </th>
+              <th className="py-3 px-4 text-center font-medium text-text-secondary">
+                MP
+              </th>
+              <th className="py-3 px-4 text-center font-medium text-text-secondary">
+                W
+              </th>
+              <th className="py-3 px-4 text-center font-medium text-text-secondary">
+                D
+              </th>
+              <th className="py-3 px-4 text-center font-medium text-text-secondary">
+                L
+              </th>
+              <th className="py-3 px-4 text-center font-medium text-text-secondary">
+                GF
+              </th>
+              <th className="py-3 px-4 text-center font-medium text-text-secondary">
+                GA
+              </th>
+              <th className="py-3 px-4 text-center font-medium text-text-secondary">
+                GD
+              </th>
+              <th className="py-3 px-4 text-center font-medium text-text-secondary">
+                Pts
+              </th>
+              <th className="py-3 px-4 text-center font-medium text-text-secondary">
+                Form
+              </th>
+              {showAdvanced && (
+                <>
+                  <th className="py-3 px-4 text-center font-medium text-text-secondary">
+                    2H Perf
+                  </th>
+                  <th className="py-3 px-4 text-center font-medium text-text-secondary">
+                    Comeback
+                  </th>
+                  <th className="py-3 px-4 text-center font-medium text-text-secondary">
+                    Lead Prot
+                  </th>
+                </>
+              )}
+            </tr>
+          </thead>
+          <tbody>
+            {teams.map((team, index) => (
+              <tr
+                key={team.id}
+                className="border-b border-border hover:bg-background-hover"
+              >
+                <td className="py-3 px-4 text-left">{index + 1}</td>
+                <td className="py-3 px-4 text-left font-medium">{team.name}</td>
+                <td className="py-3 px-4 text-center">{team.matches}</td>
+                <td className="py-3 px-4 text-center">{team.wins}</td>
+                <td className="py-3 px-4 text-center">{team.draws}</td>
+                <td className="py-3 px-4 text-center">{team.losses}</td>
+                <td className="py-3 px-4 text-center">{team.goalsFor}</td>
+                <td className="py-3 px-4 text-center">{team.goalsAgainst}</td>
+                <td
+                  className={`py-3 px-4 text-center ${team.goalDifference > 0 ? 'text-accent-green' : team.goalDifference < 0 ? 'text-accent-red' : ''}`}
+                >
+                  {team.goalDifference > 0
+                    ? `+${team.goalDifference}`
+                    : team.goalDifference}
+                </td>
+                <td className="py-3 px-4 text-center font-medium">
+                  {team.points}
+                </td>
+                <td className="py-3 px-4">
+                  <div className="flex items-center justify-center gap-1">
+                    {team.form.map((result, i) => (
+                      <div
+                        key={i}
+                        className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium ${result === 'W' ? 'bg-accent-green-muted text-accent-green' : result === 'D' ? 'bg-accent-yellow-muted text-accent-yellow' : 'bg-accent-red-muted text-accent-red'}`}
+                      >
+                        {result}
+                      </div>
+                    ))}
+                  </div>
+                </td>
+                {showAdvanced && (
+                  <>
+                    <td
+                      className={`py-3 px-4 text-center ${team.secondHalfPerformance.startsWith('+') ? 'text-accent-green' : team.secondHalfPerformance.startsWith('-') ? 'text-accent-red' : ''}`}
+                    >
+                      {team.secondHalfPerformance}
+                    </td>
+                    <td className="py-3 px-4 text-center">
+                      <span
+                        className={`px-2 py-1 rounded text-xs ${team.comebackAbility === 'High' ? 'bg-accent-green-muted text-accent-green' : team.comebackAbility === 'Medium' ? 'bg-accent-yellow-muted text-accent-yellow' : 'bg-accent-red-muted text-accent-red'}`}
+                      >
+                        {team.comebackAbility}
+                      </span>
+                    </td>
+                    <td className="py-3 px-4 text-center">
+                      {team.leadProtection}
+                    </td>
+                  </>
+                )}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  )
+}
+
+```
+```components/virtualLeague/MatchPrediction.tsx
+import React, { useEffect, useState } from 'react'
+import { BarChart, Zap, TrendingUp, Percent } from 'lucide-react'
+import { predictionEngine } from '../../services/AdvancedPredictionEngine'
+interface MatchPredictionProps {
+  team1: string
+  team2: string
+  team1Win?: number
+  draw?: number
+  team2Win?: number
+  predictedScore?: string
+}
+export function MatchPrediction({
+  team1,
+  team2,
+  team1Win: initialTeam1Win,
+  draw: initialDraw,
+  team2Win: initialTeam2Win,
+  predictedScore: initialPredictedScore,
+}: MatchPredictionProps) {
+  const [activeTab, setActiveTab] = useState('basic')
+  const [predictionData, setPredictionData] = useState<any>({
+    team1Win: initialTeam1Win || 0,
+    draw: initialDraw || 0,
+    team2Win: initialTeam2Win || 0,
+    predictedScore: initialPredictedScore || '0-0',
+    expectedHomeGoals: 0,
+    expectedAwayGoals: 0,
+    statistics: null,
+    confidence: 0,
+  })
+  useEffect(() => {
+    // Az új predikciós motor használata
+    const prediction = predictionEngine.generateAdvancedPrediction(team1, team2)
+    setPredictionData({
+      team1Win: Math.round(prediction.homeWinProbability),
+      draw: Math.round(prediction.drawProbability),
+      team2Win: Math.round(prediction.awayWinProbability),
+      predictedScore: prediction.predictedScore,
+      expectedHomeGoals: prediction.expectedHomeGoals,
+      expectedAwayGoals: prediction.expectedAwayGoals,
+      statistics: prediction.statistics,
+      confidence: prediction.confidence * 100,
+    })
+  }, [team1, team2])
+  return (
+    <div className="p-4 border border-border rounded-lg">
+      <div className="flex flex-col md:flex-row items-center justify-between mb-6">
+        <div className="flex items-center gap-6 mb-4 md:mb-0">
+          <div className="text-center">
+            <div className="w-12 h-12 bg-accent-blue-muted rounded-full flex items-center justify-center text-accent-blue font-bold mx-auto mb-2">
+              {team1.charAt(0)}
+            </div>
+            <div className="font-medium">{team1}</div>
+          </div>
+          <div className="text-center">
+            <div className="text-2xl font-bold text-text-primary">
+              {predictionData.predictedScore}
+            </div>
+            <div className="text-xs text-text-secondary">Predicted score</div>
+          </div>
+          <div className="text-center">
+            <div className="w-12 h-12 bg-accent-red-muted rounded-full flex items-center justify-center text-accent-red font-bold mx-auto mb-2">
+              {team2.charAt(0)}
+            </div>
+            <div className="font-medium">{team2}</div>
+          </div>
+        </div>
+        <div className="flex items-center gap-2">
+          <BarChart className="w-5 h-5 text-text-secondary" />
+          <span className="text-sm text-text-secondary">Advanced ML model</span>
+        </div>
+      </div>
+      <div className="mb-6 border-b border-border">
+        <div className="flex">
+          <button
+            onClick={() => setActiveTab('basic')}
+            className={`px-4 py-2 border-b-2 font-medium text-sm ${activeTab === 'basic' ? 'border-accent-blue text-text-primary' : 'border-transparent text-text-secondary hover:text-text-primary'}`}
+          >
+            Basic Prediction
+          </button>
+          <button
+            onClick={() => setActiveTab('advanced')}
+            className={`px-4 py-2 border-b-2 font-medium text-sm ${activeTab === 'advanced' ? 'border-accent-blue text-text-primary' : 'border-transparent text-text-secondary hover:text-text-primary'}`}
+          >
+            Advanced Analysis
+          </button>
+          <button
+            onClick={() => setActiveTab('halftime')}
+            className={`px-4 py-2 border-b-2 font-medium text-sm ${activeTab === 'halftime' ? 'border-accent-blue text-text-primary' : 'border-transparent text-text-secondary hover:text-text-primary'}`}
+          >
+            Half-Time Analysis
+          </button>
+        </div>
+      </div>
+      {activeTab === 'basic' && (
+        <div className="space-y-4">
+          <div>
+            <div className="flex items-center justify-between text-sm mb-1">
+              <span>{team1} Win</span>
+              <span className="font-medium">{predictionData.team1Win}%</span>
+            </div>
+            <div className="h-2 bg-background-hover rounded-full overflow-hidden">
+              <div
+                className="h-full bg-accent-blue rounded-full"
+                style={{
+                  width: `${predictionData.team1Win}%`,
+                }}
+              />
+            </div>
+          </div>
+          <div>
+            <div className="flex items-center justify-between text-sm mb-1">
+              <span>Draw</span>
+              <span className="font-medium">{predictionData.draw}%</span>
+            </div>
+            <div className="h-2 bg-background-hover rounded-full overflow-hidden">
+              <div
+                className="h-full bg-accent-yellow rounded-full"
+                style={{
+                  width: `${predictionData.draw}%`,
+                }}
+              />
+            </div>
+          </div>
+          <div>
+            <div className="flex items-center justify-between text-sm mb-1">
+              <span>{team2} Win</span>
+              <span className="font-medium">{predictionData.team2Win}%</span>
+            </div>
+            <div className="h-2 bg-background-hover rounded-full overflow-hidden">
+              <div
+                className="h-full bg-accent-red rounded-full"
+                style={{
+                  width: `${predictionData.team2Win}%`,
+                }}
+              />
+            </div>
+          </div>
+          <div className="mt-6 border-t border-border pt-4">
+            <div className="flex justify-between items-center mb-3">
+              <h4 className="font-medium">Most Probable Scores</h4>
+              <div className="text-xs text-accent-green">
+                {predictionData.confidence.toFixed(1)}% confidence
+              </div>
+            </div>
+            <div className="grid grid-cols-3 gap-2">
+              <div className="p-2 border border-border rounded-lg text-center">
+                <div className="font-medium">
+                  {predictionData.predictedScore}
+                </div>
+                <div className="text-xs text-text-secondary">7.5%</div>
+              </div>
+              <div className="p-2 border border-border rounded-lg text-center">
+                <div className="font-medium">1-1</div>
+                <div className="text-xs text-text-secondary">6.8%</div>
+              </div>
+              <div className="p-2 border border-border rounded-lg text-center">
+                <div className="font-medium">2-0</div>
+                <div className="text-xs text-text-secondary">6.2%</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      {activeTab === 'advanced' && (
+        <div className="space-y-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="border border-border rounded-lg p-3">
+              <h4 className="text-sm font-medium mb-2 flex items-center gap-2">
+                <Zap className="w-4 h-4 text-accent-yellow" />
+                Form Analysis (Last 5 matches)
+              </h4>
+              <div className="space-y-3">
+                <div>
+                  <div className="flex justify-between text-xs text-text-secondary mb-1">
+                    <span>{team1}</span>
+                    <span>W-W-D-L-W</span>
+                  </div>
+                  <div className="h-1.5 bg-background-hover rounded-full overflow-hidden">
+                    <div className="h-full w-[75%] bg-accent-blue rounded-full" />
+                  </div>
+                </div>
+                <div>
+                  <div className="flex justify-between text-xs text-text-secondary mb-1">
+                    <span>{team2}</span>
+                    <span>D-L-W-D-W</span>
+                  </div>
+                  <div className="h-1.5 bg-background-hover rounded-full overflow-hidden">
+                    <div className="h-full w-[60%] bg-accent-red rounded-full" />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="border border-border rounded-lg p-3">
+              <h4 className="text-sm font-medium mb-2 flex items-center gap-2">
+                <TrendingUp className="w-4 h-4 text-accent-green" />
+                Head-to-Head History
+              </h4>
+              {predictionData.statistics &&
+              predictionData.statistics.headToHead ? (
+                <div className="grid grid-cols-3 text-center">
+                  <div>
+                    <div className="text-accent-blue font-medium">
+                      {predictionData.statistics.headToHead.team1Wins}
+                    </div>
+                    <div className="text-xs text-text-secondary">
+                      {team1} Wins
+                    </div>
+                  </div>
+                  <div>
+                    <div className="text-accent-yellow font-medium">
+                      {predictionData.statistics.headToHead.draws}
+                    </div>
+                    <div className="text-xs text-text-secondary">Draws</div>
+                  </div>
+                  <div>
+                    <div className="text-accent-red font-medium">
+                      {predictionData.statistics.headToHead.team2Wins}
+                    </div>
+                    <div className="text-xs text-text-secondary">
+                      {team2} Wins
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="text-center text-text-secondary text-sm">
+                  Loading head-to-head data...
+                </div>
+              )}
+            </div>
+          </div>
+          <div className="border border-border rounded-lg p-3">
+            <h4 className="text-sm font-medium mb-2 flex items-center gap-2">
+              <Percent className="w-4 h-4 text-accent-blue" />
+              Team Performance Metrics
+            </h4>
+            {predictionData.statistics &&
+            predictionData.statistics.teamComparison ? (
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <div className="text-xs text-text-secondary mb-1">
+                    {team1} Second Half Performance
+                  </div>
+                  <div className="font-medium text-accent-green">+5 goals</div>
+                </div>
+                <div>
+                  <div className="text-xs text-text-secondary mb-1">
+                    {team2} Second Half Performance
+                  </div>
+                  <div className="font-medium text-accent-red">-2 goals</div>
+                </div>
+                <div>
+                  <div className="text-xs text-text-secondary mb-1">
+                    {team1} Momentum
+                  </div>
+                  <div className="font-medium">
+                    {predictionData.statistics.teamComparison.momentum.home}
+                  </div>
+                </div>
+                <div>
+                  <div className="text-xs text-text-secondary mb-1">
+                    {team2} Momentum
+                  </div>
+                  <div className="font-medium">
+                    {predictionData.statistics.teamComparison.momentum.away}
+                  </div>
+                </div>
+                <div>
+                  <div className="text-xs text-text-secondary mb-1">
+                    {team1} Form Index
+                  </div>
+                  <div className="font-medium">
+                    {predictionData.statistics.teamComparison.formIndex.home}
+                  </div>
+                </div>
+                <div>
+                  <div className="text-xs text-text-secondary mb-1">
+                    {team2} Form Index
+                  </div>
+                  <div className="font-medium">
+                    {predictionData.statistics.teamComparison.formIndex.away}
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="text-center text-text-secondary text-sm">
+                Loading team metrics...
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+      {activeTab === 'halftime' && (
+        <div className="space-y-4">
+          <div className="border border-border rounded-lg p-3">
+            <h4 className="text-sm font-medium mb-3">Half-Time Prediction</h4>
+            <div className="flex justify-between items-center mb-3">
+              <div className="text-center">
+                <div className="font-medium text-lg">1</div>
+                <div className="text-xs text-text-secondary">{team1}</div>
+              </div>
+              <div className="text-center">
+                <div className="text-xs text-text-secondary">HT Score</div>
+                <div className="text-xs">35% probability</div>
+              </div>
+              <div className="text-center">
+                <div className="font-medium text-lg">0</div>
+                <div className="text-xs text-text-secondary">{team2}</div>
+              </div>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="border border-border rounded-lg p-3">
+              <h4 className="text-sm font-medium mb-2">
+                Half-Time → Full-Time Correlation
+              </h4>
+              <div className="space-y-2">
+                <div className="text-xs">
+                  <span className="text-text-secondary">
+                    If {team1} leads at HT:{' '}
+                  </span>
+                  <span className="text-accent-green">85% win probability</span>
+                </div>
+                <div className="text-xs">
+                  <span className="text-text-secondary">
+                    If {team2} leads at HT:{' '}
+                  </span>
+                  <span className="text-accent-green">70% win probability</span>
+                </div>
+                <div className="text-xs">
+                  <span className="text-text-secondary">If drawn at HT: </span>
+                  <span className="text-accent-yellow">45% ends in draw</span>
+                </div>
+              </div>
+            </div>
+            <div className="border border-border rounded-lg p-3">
+              <h4 className="text-sm font-medium mb-2">
+                Half-Time Goal Distribution
+              </h4>
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <div className="text-xs text-text-secondary">
+                    {team1} First Half Goals
+                  </div>
+                  <div className="font-medium">
+                    {(predictionData.expectedHomeGoals * 0.45).toFixed(1)} (avg)
+                  </div>
+                </div>
+                <div>
+                  <div className="text-xs text-text-secondary">
+                    {team2} First Half Goals
+                  </div>
+                  <div className="font-medium">
+                    {(predictionData.expectedAwayGoals * 0.4).toFixed(1)} (avg)
+                  </div>
+                </div>
+                <div>
+                  <div className="text-xs text-text-secondary">
+                    {team1} Second Half Goals
+                  </div>
+                  <div className="font-medium">
+                    {(predictionData.expectedHomeGoals * 0.55).toFixed(1)} (avg)
+                  </div>
+                </div>
+                <div>
+                  <div className="text-xs text-text-secondary">
+                    {team2} Second Half Goals
+                  </div>
+                  <div className="font-medium">
+                    {(predictionData.expectedAwayGoals * 0.6).toFixed(1)} (avg)
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
+```
+```components/virtualLeague/TeamPerformanceChart.tsx
+import React from 'react'
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  Legend,
+} from 'recharts'
+const performanceData = [
+  {
+    name: 'Barcelona',
+    wins: 7,
+    draws: 2,
+    losses: 1,
+    goalsFor: 22,
+    goalsAgainst: 8,
+  },
+  {
+    name: 'Madrid Fehér',
+    wins: 7,
+    draws: 1,
+    losses: 2,
+    goalsFor: 19,
+    goalsAgainst: 7,
+  },
+  {
+    name: 'Girona',
+    wins: 6,
+    draws: 2,
+    losses: 2,
+    goalsFor: 18,
+    goalsAgainst: 12,
+  },
+  {
+    name: 'Madrid Piros',
+    wins: 5,
+    draws: 3,
+    losses: 2,
+    goalsFor: 16,
+    goalsAgainst: 10,
+  },
+  {
+    name: 'Bilbao',
+    wins: 5,
+    draws: 2,
+    losses: 3,
+    goalsFor: 15,
+    goalsAgainst: 11,
+  },
+]
+export function TeamPerformanceChart() {
+  return (
+    <div className="w-full h-[300px]">
+      <ResponsiveContainer width="100%" height="100%">
+        <BarChart
+          data={performanceData}
+          margin={{
+            top: 20,
+            right: 30,
+            left: 0,
+            bottom: 5,
+          }}
+        >
+          <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+          <XAxis
+            dataKey="name"
+            tick={{
+              fill: 'var(--text-secondary)',
+              fontSize: 12,
+            }}
+            axisLine={{
+              stroke: 'rgba(255,255,255,0.1)',
+            }}
+          />
+          <YAxis
+            tick={{
+              fill: 'var(--text-secondary)',
+              fontSize: 12,
+            }}
+            axisLine={{
+              stroke: 'rgba(255,255,255,0.1)',
+            }}
+          />
+          <Tooltip
+            contentStyle={{
+              background: 'var(--bg-card)',
+              border: '1px solid var(--border)',
+              borderRadius: '8px',
+            }}
+          />
+          <Legend />
+          <Bar
+            dataKey="wins"
+            name="Wins"
+            fill="var(--accent-green)"
+            radius={[4, 4, 0, 0]}
+          />
+          <Bar
+            dataKey="draws"
+            name="Draws"
+            fill="var(--accent-yellow)"
+            radius={[4, 4, 0, 0]}
+          />
+          <Bar
+            dataKey="losses"
+            name="Losses"
+            fill="var(--accent-red)"
+            radius={[4, 4, 0, 0]}
+          />
+        </BarChart>
+      </ResponsiveContainer>
+    </div>
+  )
+}
+
+```
+```components/virtualLeague/UpcomingMatches.tsx
+import React from 'react'
+import { Calendar, Clock, TrendingUp } from 'lucide-react'
+const UPCOMING_MATCHES = [
+  {
+    id: 1,
+    homeTeam: 'Barcelona',
+    awayTeam: 'Madrid Fehér',
+    date: '2023-10-15',
+    time: '20:45',
+    prediction: {
+      favorite: 'home',
+      odds: '1.85',
+      confidence: 'High',
+    },
+  },
+  {
+    id: 2,
+    homeTeam: 'Girona',
+    awayTeam: 'Bilbao',
+    date: '2023-10-16',
+    time: '18:30',
+    prediction: {
+      favorite: 'home',
+      odds: '2.10',
+      confidence: 'Medium',
+    },
+  },
+  {
+    id: 3,
+    homeTeam: 'Madrid Piros',
+    awayTeam: 'Sevilla Piros',
+    date: '2023-10-16',
+    time: '21:00',
+    prediction: {
+      favorite: 'draw',
+      odds: '3.25',
+      confidence: 'Medium',
+    },
+  },
+  {
+    id: 4,
+    homeTeam: 'Valencia',
+    awayTeam: 'Villarreal',
+    date: '2023-10-17',
+    time: '19:00',
+    prediction: {
+      favorite: 'away',
+      odds: '2.45',
+      confidence: 'Low',
+    },
+  },
+]
+export function UpcomingMatches() {
+  return (
+    <div className="space-y-4">
+      {UPCOMING_MATCHES.map((match) => (
+        <div
+          key={match.id}
+          className="p-3 border border-border rounded-lg hover:border-accent-blue transition-colors cursor-pointer"
+        >
+          <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center gap-2 text-text-secondary text-sm">
+              <Calendar className="w-4 h-4" />
+              <span>{match.date}</span>
+            </div>
+            <div className="flex items-center gap-2 text-text-secondary text-sm">
+              <Clock className="w-4 h-4" />
+              <span>{match.time}</span>
+            </div>
+          </div>
+          <div className="flex items-center justify-between mb-3">
+            <div className="text-sm font-medium">{match.homeTeam}</div>
+            <div className="text-xs text-text-secondary">vs</div>
+            <div className="text-sm font-medium">{match.awayTeam}</div>
+          </div>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <TrendingUp className="w-4 h-4 text-accent-blue" />
+              <span className="text-xs text-text-secondary">
+                {match.prediction.favorite === 'home'
+                  ? `${match.homeTeam} to win`
+                  : match.prediction.favorite === 'away'
+                    ? `${match.awayTeam} to win`
+                    : 'Draw predicted'}
+              </span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span
+                className={`text-xs px-2 py-1 rounded ${match.prediction.confidence === 'High' ? 'bg-accent-green-muted text-accent-green' : match.prediction.confidence === 'Medium' ? 'bg-accent-yellow-muted text-accent-yellow' : 'bg-accent-red-muted text-accent-red'}`}
+              >
+                {match.prediction.confidence}
+              </span>
+              <span className="text-xs px-2 py-1 rounded bg-background-hover text-text-secondary">
+                {match.prediction.odds}
+              </span>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+```
+```components/virtualLeague/MatchAnalysis.tsx
+import React, { useState } from 'react'
+import {
+  BarChart,
+  TrendingUp,
+  ChevronDown,
+  Clock,
+  Calendar,
+} from 'lucide-react'
+export function MatchAnalysis() {
+  const [selectedMatch, setSelectedMatch] = useState('match1')
+  const matches = {
+    match1: {
+      team1: 'Barcelona',
+      team2: 'Madrid Fehér',
+      date: '2023-09-12',
+      halftimeScore: '1-1',
+      fulltimeScore: '2-1',
+      venue: 'home',
+      stats: {
+        possession: {
+          team1: 62,
+          team2: 38,
+        },
+        shots: {
+          team1: 14,
+          team2: 8,
+        },
+        shotsOnTarget: {
+          team1: 6,
+          team2: 3,
+        },
+        corners: {
+          team1: 7,
+          team2: 2,
+        },
+        fouls: {
+          team1: 9,
+          team2: 12,
+        },
+      },
+      timeline: [
+        {
+          minute: 23,
+          team: 'team1',
+          event: 'Goal',
+          player: 'Lewandowski',
+        },
+        {
+          minute: 41,
+          team: 'team2',
+          event: 'Goal',
+          player: 'Bellingham',
+        },
+        {
+          minute: 67,
+          team: 'team1',
+          event: 'Goal',
+          player: 'Pedri',
+        },
+      ],
+    },
+    match2: {
+      team1: 'Girona',
+      team2: 'Bilbao',
+      date: '2023-09-20',
+      halftimeScore: '0-1',
+      fulltimeScore: '2-1',
+      venue: 'home',
+      stats: {
+        possession: {
+          team1: 54,
+          team2: 46,
+        },
+        shots: {
+          team1: 12,
+          team2: 9,
+        },
+        shotsOnTarget: {
+          team1: 5,
+          team2: 4,
+        },
+        corners: {
+          team1: 6,
+          team2: 4,
+        },
+        fouls: {
+          team1: 10,
+          team2: 13,
+        },
+      },
+      timeline: [
+        {
+          minute: 32,
+          team: 'team2',
+          event: 'Goal',
+          player: 'Williams',
+        },
+        {
+          minute: 58,
+          team: 'team1',
+          event: 'Goal',
+          player: 'Dovbyk',
+        },
+        {
+          minute: 76,
+          team: 'team1',
+          event: 'Goal',
+          player: 'Tsygankov',
+        },
+      ],
+    },
+    match3: {
+      team1: 'Madrid Piros',
+      team2: 'Sevilla Piros',
+      date: '2023-09-25',
+      halftimeScore: '1-0',
+      fulltimeScore: '2-0',
+      venue: 'away',
+      stats: {
+        possession: {
+          team1: 57,
+          team2: 43,
+        },
+        shots: {
+          team1: 13,
+          team2: 7,
+        },
+        shotsOnTarget: {
+          team1: 5,
+          team2: 2,
+        },
+        corners: {
+          team1: 5,
+          team2: 3,
+        },
+        fouls: {
+          team1: 11,
+          team2: 14,
+        },
+      },
+      timeline: [
+        {
+          minute: 18,
+          team: 'team1',
+          event: 'Goal',
+          player: 'Griezmann',
+        },
+        {
+          minute: 72,
+          team: 'team1',
+          event: 'Goal',
+          player: 'Morata',
+        },
+      ],
+    },
+  }
+  const matchData = matches[selectedMatch as keyof typeof matches]
+  const getTeamClass = (team: string) => {
+    return team === 'team1' ? 'text-accent-blue' : 'text-accent-red'
+  }
+  return (
+    <div className="card">
+      <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-6">
+        <h3 className="text-lg font-medium mb-3 md:mb-0">Match Analysis</h3>
+        <div className="relative w-full md:w-[280px]">
+          <select
+            className="w-full bg-background border border-border rounded-lg px-3 py-2 text-sm appearance-none focus:outline-none focus:border-accent-blue"
+            value={selectedMatch}
+            onChange={(e) => setSelectedMatch(e.target.value)}
+          >
+            <option value="match1">Barcelona vs Madrid Fehér (2-1)</option>
+            <option value="match2">Girona vs Bilbao (2-1)</option>
+            <option value="match3">Madrid Piros vs Sevilla Piros (2-0)</option>
+          </select>
+          <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-tertiary pointer-events-none" />
+        </div>
+      </div>
+      <div className="border border-border rounded-lg p-4 mb-6">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-2 text-text-secondary text-sm">
+            <Calendar className="w-4 h-4" />
+            <span>{matchData.date}</span>
+            <span className="px-2 py-1 text-xs bg-accent-blue-muted text-accent-blue rounded ml-2">
+              {matchData.venue === 'home' ? 'Home' : 'Away'}
+            </span>
+          </div>
+          <div className="flex items-center gap-2">
+            <Clock className="w-4 h-4 text-text-secondary" />
+            <span className="text-sm text-text-secondary">
+              Half-time: {matchData.halftimeScore}
+            </span>
+          </div>
+        </div>
+        <div className="flex items-center justify-between">
+          <div className="text-center w-[40%]">
+            <div className="w-12 h-12 bg-accent-blue-muted rounded-full flex items-center justify-center text-accent-blue font-bold mx-auto mb-2">
+              {matchData.team1.charAt(0)}
+            </div>
+            <div className="font-medium">{matchData.team1}</div>
+          </div>
+          <div className="text-center">
+            <div className="text-2xl font-bold">{matchData.fulltimeScore}</div>
+            <div className="text-xs text-text-secondary">Full-time</div>
+          </div>
+          <div className="text-center w-[40%]">
+            <div className="w-12 h-12 bg-accent-red-muted rounded-full flex items-center justify-center text-accent-red font-bold mx-auto mb-2">
+              {matchData.team2.charAt(0)}
+            </div>
+            <div className="font-medium">{matchData.team2}</div>
+          </div>
+        </div>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <div className="border border-border rounded-lg p-4">
+          <h4 className="font-medium mb-4">Match Statistics</h4>
+          <div className="space-y-4">
+            <div>
+              <div className="flex justify-between text-sm mb-1">
+                <span className="text-accent-blue">
+                  {matchData.stats.possession.team1}%
+                </span>
+                <span className="text-text-secondary">Possession</span>
+                <span className="text-accent-red">
+                  {matchData.stats.possession.team2}%
+                </span>
+              </div>
+              <div className="flex h-2 bg-background-hover rounded-full overflow-hidden">
+                <div
+                  className="bg-accent-blue"
+                  style={{
+                    width: `${matchData.stats.possession.team1}%`,
+                  }}
+                />
+                <div
+                  className="bg-accent-red"
+                  style={{
+                    width: `${matchData.stats.possession.team2}%`,
+                  }}
+                />
+              </div>
+            </div>
+            <div>
+              <div className="flex justify-between text-sm mb-1">
+                <span className="text-accent-blue">
+                  {matchData.stats.shots.team1}
+                </span>
+                <span className="text-text-secondary">Shots</span>
+                <span className="text-accent-red">
+                  {matchData.stats.shots.team2}
+                </span>
+              </div>
+              <div className="flex h-2 bg-background-hover rounded-full overflow-hidden">
+                <div
+                  className="bg-accent-blue"
+                  style={{
+                    width: `${(matchData.stats.shots.team1 / (matchData.stats.shots.team1 + matchData.stats.shots.team2)) * 100}%`,
+                  }}
+                />
+                <div
+                  className="bg-accent-red"
+                  style={{
+                    width: `${(matchData.stats.shots.team2 / (matchData.stats.shots.team1 + matchData.stats.shots.team2)) * 100}%`,
+                  }}
+                />
+              </div>
+            </div>
+            <div>
+              <div className="flex justify-between text-sm mb-1">
+                <span className="text-accent-blue">
+                  {matchData.stats.shotsOnTarget.team1}
+                </span>
+                <span className="text-text-secondary">Shots on Target</span>
+                <span className="text-accent-red">
+                  {matchData.stats.shotsOnTarget.team2}
+                </span>
+              </div>
+              <div className="flex h-2 bg-background-hover rounded-full overflow-hidden">
+                <div
+                  className="bg-accent-blue"
+                  style={{
+                    width: `${(matchData.stats.shotsOnTarget.team1 / (matchData.stats.shotsOnTarget.team1 + matchData.stats.shotsOnTarget.team2)) * 100}%`,
+                  }}
+                />
+                <div
+                  className="bg-accent-red"
+                  style={{
+                    width: `${(matchData.stats.shotsOnTarget.team2 / (matchData.stats.shotsOnTarget.team1 + matchData.stats.shotsOnTarget.team2)) * 100}%`,
+                  }}
+                />
+              </div>
+            </div>
+            <div>
+              <div className="flex justify-between text-sm mb-1">
+                <span className="text-accent-blue">
+                  {matchData.stats.corners.team1}
+                </span>
+                <span className="text-text-secondary">Corners</span>
+                <span className="text-accent-red">
+                  {matchData.stats.corners.team2}
+                </span>
+              </div>
+              <div className="flex h-2 bg-background-hover rounded-full overflow-hidden">
+                <div
+                  className="bg-accent-blue"
+                  style={{
+                    width: `${(matchData.stats.corners.team1 / (matchData.stats.corners.team1 + matchData.stats.corners.team2)) * 100}%`,
+                  }}
+                />
+                <div
+                  className="bg-accent-red"
+                  style={{
+                    width: `${(matchData.stats.corners.team2 / (matchData.stats.corners.team1 + matchData.stats.corners.team2)) * 100}%`,
+                  }}
+                />
+              </div>
+            </div>
+            <div>
+              <div className="flex justify-between text-sm mb-1">
+                <span className="text-accent-blue">
+                  {matchData.stats.fouls.team1}
+                </span>
+                <span className="text-text-secondary">Fouls</span>
+                <span className="text-accent-red">
+                  {matchData.stats.fouls.team2}
+                </span>
+              </div>
+              <div className="flex h-2 bg-background-hover rounded-full overflow-hidden">
+                <div
+                  className="bg-accent-blue"
+                  style={{
+                    width: `${(matchData.stats.fouls.team1 / (matchData.stats.fouls.team1 + matchData.stats.fouls.team2)) * 100}%`,
+                  }}
+                />
+                <div
+                  className="bg-accent-red"
+                  style={{
+                    width: `${(matchData.stats.fouls.team2 / (matchData.stats.fouls.team1 + matchData.stats.fouls.team2)) * 100}%`,
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="border border-border rounded-lg p-4">
+          <h4 className="font-medium mb-4">Match Timeline</h4>
+          <div className="space-y-4">
+            {matchData.timeline.map((event, index) => (
+              <div key={index} className="flex items-center gap-3">
+                <div className="w-10 text-center">
+                  <span className="text-text-secondary text-sm">
+                    {event.minute}'
+                  </span>
+                </div>
+                <div
+                  className={`flex-1 p-2 rounded-lg ${event.team === 'team1' ? 'bg-accent-blue-muted' : 'bg-accent-red-muted'}`}
+                >
+                  <div className="flex items-center justify-between">
+                    <div
+                      className={`text-sm font-medium ${getTeamClass(event.team)}`}
+                    >
+                      {event.event}
+                    </div>
+                    <div className="text-sm">
+                      {event.team === 'team1'
+                        ? matchData.team1
+                        : matchData.team2}
+                    </div>
+                  </div>
+                  <div className="text-xs text-text-secondary mt-1">
+                    {event.player}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+      <div className="border border-border rounded-lg p-4">
+        <h4 className="font-medium mb-4">Performance Analysis</h4>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="p-3 border border-border rounded-lg">
+            <h5 className="text-sm font-medium mb-2">Half-Time Analysis</h5>
+            <p className="text-xs text-text-secondary">
+              {matchData.halftimeScore ===
+              matchData.fulltimeScore.split('-')[0] +
+                '-' +
+                matchData.fulltimeScore.split('-')[1]
+                ? 'No change from half-time to full-time.'
+                : matchData.halftimeScore.split('-')[0] >
+                      matchData.halftimeScore.split('-')[1] &&
+                    matchData.fulltimeScore.split('-')[0] >
+                      matchData.fulltimeScore.split('-')[1]
+                  ? `${matchData.team1} maintained their lead from half-time.`
+                  : matchData.halftimeScore.split('-')[0] <
+                        matchData.halftimeScore.split('-')[1] &&
+                      matchData.fulltimeScore.split('-')[0] <
+                        matchData.fulltimeScore.split('-')[1]
+                    ? `${matchData.team2} maintained their lead from half-time.`
+                    : matchData.halftimeScore.split('-')[0] ===
+                          matchData.halftimeScore.split('-')[1] &&
+                        matchData.fulltimeScore.split('-')[0] >
+                          matchData.fulltimeScore.split('-')[1]
+                      ? `${matchData.team1} won after a drawn first half.`
+                      : matchData.halftimeScore.split('-')[0] ===
+                            matchData.halftimeScore.split('-')[1] &&
+                          matchData.fulltimeScore.split('-')[0] <
+                            matchData.fulltimeScore.split('-')[1]
+                        ? `${matchData.team2} won after a drawn first half.`
+                        : matchData.halftimeScore.split('-')[0] >
+                              matchData.halftimeScore.split('-')[1] &&
+                            matchData.fulltimeScore.split('-')[0] <
+                              matchData.fulltimeScore.split('-')[1]
+                          ? `${matchData.team2} made a comeback in the second half.`
+                          : `${matchData.team1} made a comeback in the second half.`}
+            </p>
+          </div>
+          <div className="p-3 border border-border rounded-lg">
+            <h5 className="text-sm font-medium mb-2">
+              Second Half Performance
+            </h5>
+            <p className="text-xs text-text-secondary">
+              {(() => {
+                const firstHalfGoalsTeam1 = parseInt(
+                  matchData.halftimeScore.split('-')[0],
+                )
+                const firstHalfGoalsTeam2 = parseInt(
+                  matchData.halftimeScore.split('-')[1],
+                )
+                const fullTimeGoalsTeam1 = parseInt(
+                  matchData.fulltimeScore.split('-')[0],
+                )
+                const fullTimeGoalsTeam2 = parseInt(
+                  matchData.fulltimeScore.split('-')[1],
+                )
+                const secondHalfGoalsTeam1 =
+                  fullTimeGoalsTeam1 - firstHalfGoalsTeam1
+                const secondHalfGoalsTeam2 =
+                  fullTimeGoalsTeam2 - firstHalfGoalsTeam2
+                if (secondHalfGoalsTeam1 > secondHalfGoalsTeam2) {
+                  return `${matchData.team1} performed better in the second half with ${secondHalfGoalsTeam1} goals vs ${matchData.team2}'s ${secondHalfGoalsTeam2}.`
+                } else if (secondHalfGoalsTeam2 > secondHalfGoalsTeam1) {
+                  return `${matchData.team2} performed better in the second half with ${secondHalfGoalsTeam2} goals vs ${matchData.team1}'s ${secondHalfGoalsTeam1}.`
+                } else {
+                  return `Both teams scored ${secondHalfGoalsTeam1} goals in the second half.`
+                }
+              })()}
+            </p>
+          </div>
+          <div className="p-3 border border-border rounded-lg">
+            <h5 className="text-sm font-medium mb-2">Match Efficiency</h5>
+            <p className="text-xs text-text-secondary">
+              {(() => {
+                const team1Efficiency = (
+                  (parseInt(matchData.fulltimeScore.split('-')[0]) /
+                    matchData.stats.shotsOnTarget.team1) *
+                  100
+                ).toFixed(1)
+                const team2Efficiency = (
+                  (parseInt(matchData.fulltimeScore.split('-')[1]) /
+                    matchData.stats.shotsOnTarget.team2) *
+                  100
+                ).toFixed(1)
+                return `${matchData.team1} conversion rate: ${team1Efficiency}%. ${matchData.team2} conversion rate: ${team2Efficiency}%.`
+              })()}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+```
+```components/virtualLeague/TeamComparison.tsx
+import React, { useState } from 'react'
+import { ChevronDown, BarChart, TrendingUp, Shield, Zap } from 'lucide-react'
+export function TeamComparison() {
+  const [team1, setTeam1] = useState('Barcelona')
+  const [team2, setTeam2] = useState('Madrid Fehér')
+  // Sample data for team comparison
+  const teamStats = {
+    Barcelona: {
+      wins: 7,
+      draws: 2,
+      losses: 1,
+      goalsFor: 22,
+      goalsAgainst: 8,
+      xG: 19.5,
+      xGA: 9.2,
+      possession: 65,
+      passAccuracy: 88,
+      shotsPerGame: 16.2,
+      shotsOnTarget: 7.4,
+      secondHalfPerformance: '+5',
+      comebackAbility: 'High',
+      leadProtection: '85%',
+    },
+    'Madrid Fehér': {
+      wins: 7,
+      draws: 1,
+      losses: 2,
+      goalsFor: 19,
+      goalsAgainst: 7,
+      xG: 18.2,
+      xGA: 8.5,
+      possession: 62,
+      passAccuracy: 86,
+      shotsPerGame: 15.8,
+      shotsOnTarget: 6.9,
+      secondHalfPerformance: '+3',
+      comebackAbility: 'Medium',
+      leadProtection: '90%',
+    },
+    Girona: {
+      wins: 6,
+      draws: 2,
+      losses: 2,
+      goalsFor: 18,
+      goalsAgainst: 12,
+      xG: 16.8,
+      xGA: 12.5,
+      possession: 57,
+      passAccuracy: 82,
+      shotsPerGame: 14.5,
+      shotsOnTarget: 6.2,
+      secondHalfPerformance: '+7',
+      comebackAbility: 'High',
+      leadProtection: '70%',
+    },
+    'Madrid Piros': {
+      wins: 5,
+      draws: 3,
+      losses: 2,
+      goalsFor: 16,
+      goalsAgainst: 10,
+      xG: 15.3,
+      xGA: 11.2,
+      possession: 54,
+      passAccuracy: 80,
+      shotsPerGame: 13.7,
+      shotsOnTarget: 5.8,
+      secondHalfPerformance: '+2',
+      comebackAbility: 'Medium',
+      leadProtection: '75%',
+    },
+  }
+  const teams = [
+    'Barcelona',
+    'Madrid Fehér',
+    'Girona',
+    'Madrid Piros',
+    'Bilbao',
+    'San Sebastian',
+    'Villarreal',
+    'Valencia',
+    'Sevilla Piros',
+    'Mallorca',
+    'Getafe',
+    'Osasuna',
+    'Vigo',
+    'Sevilla Zöld',
+    'Alaves',
+    'Las Palmas',
+  ]
+  // Head-to-head records
+  const h2hRecords = {
+    'Barcelona-Madrid Fehér': {
+      team1Wins: 3,
+      draws: 2,
+      team2Wins: 1,
+      lastMatches: ['W', 'D', 'W', 'L', 'D'],
+    },
+    'Barcelona-Girona': {
+      team1Wins: 4,
+      draws: 1,
+      team2Wins: 0,
+      lastMatches: ['W', 'W', 'D', 'W', 'W'],
+    },
+    'Barcelona-Madrid Piros': {
+      team1Wins: 2,
+      draws: 2,
+      team2Wins: 2,
+      lastMatches: ['L', 'W', 'D', 'D', 'W'],
+    },
+    'Madrid Fehér-Girona': {
+      team1Wins: 3,
+      draws: 1,
+      team2Wins: 1,
+      lastMatches: ['W', 'W', 'D', 'L', 'W'],
+    },
+    'Madrid Fehér-Madrid Piros': {
+      team1Wins: 2,
+      draws: 3,
+      team2Wins: 1,
+      lastMatches: ['D', 'W', 'D', 'D', 'W'],
+    },
+    'Girona-Madrid Piros': {
+      team1Wins: 1,
+      draws: 2,
+      team2Wins: 2,
+      lastMatches: ['L', 'D', 'W', 'L', 'D'],
+    },
+  }
+  const getH2HKey = () => {
+    return [team1, team2].sort().join('-')
+  }
+  const h2hKey = getH2HKey()
+  const h2hData = h2hRecords[h2hKey as keyof typeof h2hRecords] || {
+    team1Wins: 0,
+    draws: 0,
+    team2Wins: 0,
+    lastMatches: [],
+  }
+  const isTeam1First = h2hKey.split('-')[0] === team1
+  const team1H2HWins = isTeam1First ? h2hData.team1Wins : h2hData.team2Wins
+  const team2H2HWins = isTeam1First ? h2hData.team2Wins : h2hData.team1Wins
+  const h2hLastMatches = [...h2hData.lastMatches]
+  if (!isTeam1First) {
+    // Invert the results for correct perspective
+    h2hLastMatches.forEach((result, index) => {
+      if (result === 'W') h2hLastMatches[index] = 'L'
+      else if (result === 'L') h2hLastMatches[index] = 'W'
+    })
+  }
+  const getStatComparison = (stat1: number, stat2: number) => {
+    const total = stat1 + stat2
+    const percent1 = (stat1 / total) * 100
+    const percent2 = (stat2 / total) * 100
+    return {
+      percent1,
+      percent2,
+    }
+  }
+  const getResultClass = (result: string) => {
+    return result === 'W'
+      ? 'bg-accent-green-muted text-accent-green'
+      : result === 'D'
+        ? 'bg-accent-yellow-muted text-accent-yellow'
+        : 'bg-accent-red-muted text-accent-red'
+  }
+  return (
+    <div className="card">
+      <h3 className="text-lg font-medium mb-6">Team Comparison</h3>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <div>
+          <label className="block text-sm text-text-secondary mb-2">
+            Team 1
+          </label>
+          <div className="relative">
+            <select
+              className="w-full bg-background border border-border rounded-lg px-3 py-2 text-sm appearance-none focus:outline-none focus:border-accent-blue"
+              value={team1}
+              onChange={(e) => setTeam1(e.target.value)}
+            >
+              {teams.map((team) => (
+                <option key={team} value={team} disabled={team === team2}>
+                  {team}
+                </option>
+              ))}
+            </select>
+            <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-tertiary pointer-events-none" />
+          </div>
+        </div>
+        <div>
+          <label className="block text-sm text-text-secondary mb-2">
+            Team 2
+          </label>
+          <div className="relative">
+            <select
+              className="w-full bg-background border border-border rounded-lg px-3 py-2 text-sm appearance-none focus:outline-none focus:border-accent-blue"
+              value={team2}
+              onChange={(e) => setTeam2(e.target.value)}
+            >
+              {teams.map((team) => (
+                <option key={team} value={team} disabled={team === team1}>
+                  {team}
+                </option>
+              ))}
+            </select>
+            <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-tertiary pointer-events-none" />
+          </div>
+        </div>
+      </div>
+      {teamStats[team1 as keyof typeof teamStats] &&
+        teamStats[team2 as keyof typeof teamStats] && (
+          <>
+            <div className="border border-border rounded-lg p-4 mb-6">
+              <h4 className="font-medium mb-4 flex items-center gap-2">
+                <BarChart className="w-4 h-4 text-text-secondary" />
+                Basic Statistics
+              </h4>
+              <div className="space-y-4">
+                <div>
+                  <div className="flex justify-between text-sm mb-1">
+                    <span className="text-accent-blue">
+                      {teamStats[team1 as keyof typeof teamStats].wins}
+                    </span>
+                    <span className="text-text-secondary">Wins</span>
+                    <span className="text-accent-red">
+                      {teamStats[team2 as keyof typeof teamStats].wins}
+                    </span>
+                  </div>
+                  {(() => {
+                    const { percent1, percent2 } = getStatComparison(
+                      teamStats[team1 as keyof typeof teamStats].wins,
+                      teamStats[team2 as keyof typeof teamStats].wins,
+                    )
+                    return (
+                      <div className="flex h-2 bg-background-hover rounded-full overflow-hidden">
+                        <div
+                          className="bg-accent-blue"
+                          style={{
+                            width: `${percent1}%`,
+                          }}
+                        />
+                        <div
+                          className="bg-accent-red"
+                          style={{
+                            width: `${percent2}%`,
+                          }}
+                        />
+                      </div>
+                    )
+                  })()}
+                </div>
+                <div>
+                  <div className="flex justify-between text-sm mb-1">
+                    <span className="text-accent-blue">
+                      {teamStats[team1 as keyof typeof teamStats].goalsFor}
+                    </span>
+                    <span className="text-text-secondary">Goals For</span>
+                    <span className="text-accent-red">
+                      {teamStats[team2 as keyof typeof teamStats].goalsFor}
+                    </span>
+                  </div>
+                  {(() => {
+                    const { percent1, percent2 } = getStatComparison(
+                      teamStats[team1 as keyof typeof teamStats].goalsFor,
+                      teamStats[team2 as keyof typeof teamStats].goalsFor,
+                    )
+                    return (
+                      <div className="flex h-2 bg-background-hover rounded-full overflow-hidden">
+                        <div
+                          className="bg-accent-blue"
+                          style={{
+                            width: `${percent1}%`,
+                          }}
+                        />
+                        <div
+                          className="bg-accent-red"
+                          style={{
+                            width: `${percent2}%`,
+                          }}
+                        />
+                      </div>
+                    )
+                  })()}
+                </div>
+                <div>
+                  <div className="flex justify-between text-sm mb-1">
+                    <span className="text-accent-blue">
+                      {teamStats[team1 as keyof typeof teamStats].goalsAgainst}
+                    </span>
+                    <span className="text-text-secondary">Goals Against</span>
+                    <span className="text-accent-red">
+                      {teamStats[team2 as keyof typeof teamStats].goalsAgainst}
+                    </span>
+                  </div>
+                  {(() => {
+                    const { percent1, percent2 } = getStatComparison(
+                      teamStats[team1 as keyof typeof teamStats].goalsAgainst,
+                      teamStats[team2 as keyof typeof teamStats].goalsAgainst,
+                    )
+                    return (
+                      <div className="flex h-2 bg-background-hover rounded-full overflow-hidden">
+                        <div
+                          className="bg-accent-blue"
+                          style={{
+                            width: `${percent1}%`,
+                          }}
+                        />
+                        <div
+                          className="bg-accent-red"
+                          style={{
+                            width: `${percent2}%`,
+                          }}
+                        />
+                      </div>
+                    )
+                  })()}
+                </div>
+                <div>
+                  <div className="flex justify-between text-sm mb-1">
+                    <span className="text-accent-blue">
+                      {teamStats[team1 as keyof typeof teamStats].possession}%
+                    </span>
+                    <span className="text-text-secondary">Possession</span>
+                    <span className="text-accent-red">
+                      {teamStats[team2 as keyof typeof teamStats].possession}%
+                    </span>
+                  </div>
+                  <div className="flex h-2 bg-background-hover rounded-full overflow-hidden">
+                    <div
+                      className="bg-accent-blue"
+                      style={{
+                        width: `${teamStats[team1 as keyof typeof teamStats].possession}%`,
+                      }}
+                    />
+                    <div
+                      className="bg-accent-red"
+                      style={{
+                        width: `${teamStats[team2 as keyof typeof teamStats].possession}%`,
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+              <div className="border border-border rounded-lg p-4">
+                <h4 className="font-medium mb-4 flex items-center gap-2">
+                  <Shield className="w-4 h-4 text-text-secondary" />
+                  Advanced Metrics
+                </h4>
+                <div className="space-y-3">
+                  <div className="grid grid-cols-3 text-sm">
+                    <div className="text-accent-blue">
+                      {teamStats[team1 as keyof typeof teamStats].xG.toFixed(1)}
+                    </div>
+                    <div className="text-center text-text-secondary">
+                      Expected Goals
+                    </div>
+                    <div className="text-right text-accent-red">
+                      {teamStats[team2 as keyof typeof teamStats].xG.toFixed(1)}
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-3 text-sm">
+                    <div className="text-accent-blue">
+                      {teamStats[team1 as keyof typeof teamStats].xGA.toFixed(
+                        1,
+                      )}
+                    </div>
+                    <div className="text-center text-text-secondary">
+                      Expected Goals Against
+                    </div>
+                    <div className="text-right text-accent-red">
+                      {teamStats[team2 as keyof typeof teamStats].xGA.toFixed(
+                        1,
+                      )}
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-3 text-sm">
+                    <div className="text-accent-blue">
+                      {teamStats[
+                        team1 as keyof typeof teamStats
+                      ].shotsPerGame.toFixed(1)}
+                    </div>
+                    <div className="text-center text-text-secondary">
+                      Shots per Game
+                    </div>
+                    <div className="text-right text-accent-red">
+                      {teamStats[
+                        team2 as keyof typeof teamStats
+                      ].shotsPerGame.toFixed(1)}
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-3 text-sm">
+                    <div className="text-accent-blue">
+                      {teamStats[
+                        team1 as keyof typeof teamStats
+                      ].shotsOnTarget.toFixed(1)}
+                    </div>
+                    <div className="text-center text-text-secondary">
+                      Shots on Target
+                    </div>
+                    <div className="text-right text-accent-red">
+                      {teamStats[
+                        team2 as keyof typeof teamStats
+                      ].shotsOnTarget.toFixed(1)}
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-3 text-sm">
+                    <div className="text-accent-blue">
+                      {teamStats[team1 as keyof typeof teamStats].passAccuracy}%
+                    </div>
+                    <div className="text-center text-text-secondary">
+                      Pass Accuracy
+                    </div>
+                    <div className="text-right text-accent-red">
+                      {teamStats[team2 as keyof typeof teamStats].passAccuracy}%
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="border border-border rounded-lg p-4">
+                <h4 className="font-medium mb-4 flex items-center gap-2">
+                  <TrendingUp className="w-4 h-4 text-text-secondary" />
+                  Head-to-Head Record
+                </h4>
+                <div className="grid grid-cols-3 gap-4 mb-4">
+                  <div className="text-center">
+                    <div className="text-accent-blue font-medium text-xl">
+                      {team1H2HWins}
+                    </div>
+                    <div className="text-xs text-text-secondary">
+                      {team1} Wins
+                    </div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-accent-yellow font-medium text-xl">
+                      {h2hData.draws}
+                    </div>
+                    <div className="text-xs text-text-secondary">Draws</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-accent-red font-medium text-xl">
+                      {team2H2HWins}
+                    </div>
+                    <div className="text-xs text-text-secondary">
+                      {team2} Wins
+                    </div>
+                  </div>
+                </div>
+                <h5 className="text-sm font-medium mb-2">Last 5 Matches</h5>
+                <div className="flex justify-center gap-2">
+                  {h2hLastMatches.map((result, i) => (
+                    <div
+                      key={i}
+                      className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium ${getResultClass(result)}`}
+                    >
+                      {result}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+            <div className="border border-border rounded-lg p-4">
+              <h4 className="font-medium mb-4 flex items-center gap-2">
+                <Zap className="w-4 h-4 text-text-secondary" />
+                Performance Indicators
+              </h4>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="p-3 border border-border rounded-lg">
+                  <h5 className="text-sm font-medium mb-2">
+                    Second Half Performance
+                  </h5>
+                  <div className="flex justify-between text-sm">
+                    <div
+                      className={`${teamStats[team1 as keyof typeof teamStats].secondHalfPerformance.startsWith('+') ? 'text-accent-green' : 'text-accent-red'}`}
+                    >
+                      {team1}:{' '}
+                      {
+                        teamStats[team1 as keyof typeof teamStats]
+                          .secondHalfPerformance
+                      }
+                    </div>
+                    <div
+                      className={`${teamStats[team2 as keyof typeof teamStats].secondHalfPerformance.startsWith('+') ? 'text-accent-green' : 'text-accent-red'}`}
+                    >
+                      {team2}:{' '}
+                      {
+                        teamStats[team2 as keyof typeof teamStats]
+                          .secondHalfPerformance
+                      }
+                    </div>
+                  </div>
+                </div>
+                <div className="p-3 border border-border rounded-lg">
+                  <h5 className="text-sm font-medium mb-2">Comeback Ability</h5>
+                  <div className="flex justify-between text-sm">
+                    <div>
+                      {team1}:{' '}
+                      <span
+                        className={`${teamStats[team1 as keyof typeof teamStats].comebackAbility === 'High' ? 'text-accent-green' : teamStats[team1 as keyof typeof teamStats].comebackAbility === 'Medium' ? 'text-accent-yellow' : 'text-accent-red'}`}
+                      >
+                        {
+                          teamStats[team1 as keyof typeof teamStats]
+                            .comebackAbility
+                        }
+                      </span>
+                    </div>
+                    <div>
+                      {team2}:{' '}
+                      <span
+                        className={`${teamStats[team2 as keyof typeof teamStats].comebackAbility === 'High' ? 'text-accent-green' : teamStats[team2 as keyof typeof teamStats].comebackAbility === 'Medium' ? 'text-accent-yellow' : 'text-accent-red'}`}
+                      >
+                        {
+                          teamStats[team2 as keyof typeof teamStats]
+                            .comebackAbility
+                        }
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div className="p-3 border border-border rounded-lg">
+                  <h5 className="text-sm font-medium mb-2">Lead Protection</h5>
+                  <div className="flex justify-between text-sm">
+                    <div>
+                      {team1}:{' '}
+                      {
+                        teamStats[team1 as keyof typeof teamStats]
+                          .leadProtection
+                      }
+                    </div>
+                    <div>
+                      {team2}:{' '}
+                      {
+                        teamStats[team2 as keyof typeof teamStats]
+                          .leadProtection
+                      }
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </>
+        )}
+    </div>
+  )
+}
+
+```
+```services/AdvancedPredictionEngine.ts
+import { Match, TeamStats } from '../types/football'
+// Definíciók a predikciós modellhez
+export interface Prediction {
+  homeTeam: string
+  awayTeam: string
+  homeWinProbability: number
+  drawProbability: number
+  awayWinProbability: number
+  expectedHomeGoals: number
+  expectedAwayGoals: number
+  predictedScore: string
+  confidence: number
+  statistics: any
+  metadata: {
+    algorithmVersion: string
+    simulationRuns: number
+    executionTimeMs: number
+    featuresUsed: string[]
+    confidenceIntervals: any
+  }
+}
+interface TeamFeatures {
+  basicStats: {
+    matchesPlayed: number
+    winPercentage: number
+    goalsForAvg: number
+    goalsAgainstAvg: number
+    goalDifference: number
+  }
+  formMetrics: {
+    formIndex: number
+    recentFormTrend: number
+    momentumScore: number
+  }
+  venuePerformance: {
+    homeGoalsAvg: number
+    homeConcededAvg: number
+    awayGoalsAvg: number
+    awayConcededAvg: number
+  }
+  advancedMetrics: {
+    consistencyScore: number
+    pressureHandling: number
+    scoringEfficiency: number
+  }
+}
+interface MatchupFeatures {
+  headToHead: any
+  styleMatchup: any
+  historicalTrends: any
+  competitiveBalance: number
+}
+export class AdvancedPredictionEngine {
+  // Gépi tanulási súlyok
+  private static readonly FEATURE_WEIGHTS = {
+    recent_form: 0.25,
+    head_to_head: 0.2,
+    home_advantage: 0.15,
+    goal_difference: 0.15,
+    seasonal_trend: 0.1,
+    momentum: 0.1,
+    rest_days: 0.05,
+  }
+  // Monte Carlo szimulációs paraméterek
+  private static readonly SIMULATION_RUNS = 10000
+  private static readonly MAX_GOALS_SIMULATION = 8
+  // Statikus adatok a csapatokról
+  private static readonly teamStats: Record<string, TeamStats> = {
+    Barcelona: {
+      wins: 7,
+      draws: 2,
+      losses: 1,
+      goalsFor: 22,
+      goalsAgainst: 8,
+      matchesPlayed: 10,
+      form: ['W', 'W', 'D', 'W', 'W'],
+      secondHalfPerformance: '+5',
+      comebackAbility: 'High',
+      leadProtection: '85%',
+      homeGoalsAvg: 2.6,
+      homeConcededAvg: 0.6,
+      awayGoalsAvg: 1.8,
+      awayConcededAvg: 1.0,
+    },
+    'Madrid Fehér': {
+      wins: 7,
+      draws: 1,
+      losses: 2,
+      goalsFor: 19,
+      goalsAgainst: 7,
+      matchesPlayed: 10,
+      form: ['W', 'L', 'W', 'W', 'W'],
+      secondHalfPerformance: '+3',
+      comebackAbility: 'Medium',
+      leadProtection: '90%',
+      homeGoalsAvg: 2.2,
+      homeConcededAvg: 0.4,
+      awayGoalsAvg: 1.6,
+      awayConcededAvg: 1.0,
+    },
+    Girona: {
+      wins: 6,
+      draws: 2,
+      losses: 2,
+      goalsFor: 18,
+      goalsAgainst: 12,
+      matchesPlayed: 10,
+      form: ['L', 'W', 'W', 'D', 'W'],
+      secondHalfPerformance: '+7',
+      comebackAbility: 'High',
+      leadProtection: '70%',
+      homeGoalsAvg: 2.2,
+      homeConcededAvg: 1.0,
+      awayGoalsAvg: 1.4,
+      awayConcededAvg: 1.4,
+    },
+    'Madrid Piros': {
+      wins: 5,
+      draws: 3,
+      losses: 2,
+      goalsFor: 16,
+      goalsAgainst: 10,
+      matchesPlayed: 10,
+      form: ['D', 'D', 'W', 'W', 'W'],
+      secondHalfPerformance: '+2',
+      comebackAbility: 'Medium',
+      leadProtection: '75%',
+      homeGoalsAvg: 2.0,
+      homeConcededAvg: 0.8,
+      awayGoalsAvg: 1.2,
+      awayConcededAvg: 1.2,
+    },
+  }
+  // Head-to-head adatok
+  private static readonly h2hRecords: Record<string, any> = {
+    'Barcelona-Madrid Fehér': {
+      team1Wins: 3,
+      draws: 2,
+      team2Wins: 1,
+      lastMatches: ['W', 'D', 'W', 'L', 'D'],
+    },
+    'Barcelona-Girona': {
+      team1Wins: 4,
+      draws: 1,
+      team2Wins: 0,
+      lastMatches: ['W', 'W', 'D', 'W', 'W'],
+    },
+    'Barcelona-Madrid Piros': {
+      team1Wins: 2,
+      draws: 2,
+      team2Wins: 2,
+      lastMatches: ['L', 'W', 'D', 'D', 'W'],
+    },
+    'Madrid Fehér-Girona': {
+      team1Wins: 3,
+      draws: 1,
+      team2Wins: 1,
+      lastMatches: ['W', 'W', 'D', 'L', 'W'],
+    },
+    'Madrid Fehér-Madrid Piros': {
+      team1Wins: 2,
+      draws: 3,
+      team2Wins: 1,
+      lastMatches: ['D', 'W', 'D', 'D', 'W'],
+    },
+    'Girona-Madrid Piros': {
+      team1Wins: 1,
+      draws: 2,
+      team2Wins: 2,
+      lastMatches: ['L', 'D', 'W', 'L', 'D'],
+    },
+  }
+  public generateAdvancedPrediction(
+    homeTeam: string,
+    awayTeam: string,
+  ): Prediction {
+    console.info('Generating advanced prediction', {
+      home_team: homeTeam,
+      away_team: awayTeam,
+      algorithm: 'Monte Carlo + ML Features',
+    })
+    const startTime = performance.now()
+    // Átfogó jellemzők kinyerése
+    const homeFeatures = this.extractTeamFeatures(homeTeam, true)
+    const awayFeatures = this.extractTeamFeatures(awayTeam, false)
+    const matchupFeatures = this.extractMatchupFeatures(homeTeam, awayTeam)
+    // Súlyozott csapat erősségek kiszámítása
+    const homeStrength = this.calculateTeamStrength(homeFeatures)
+    const awayStrength = this.calculateTeamStrength(awayFeatures)
+    // Monte Carlo szimuláció futtatása
+    const simulationResults = this.runMonteCarloSimulation(
+      homeStrength,
+      awayStrength,
+      matchupFeatures,
+    )
+    // Konfidencia metrikák számítása
+    const confidence = this.calculateAdvancedConfidence(
+      homeFeatures,
+      awayFeatures,
+      matchupFeatures,
+    )
+    // Átfogó statisztikák előkészítése
+    const statistics = this.prepareAdvancedStatistics(
+      homeFeatures,
+      awayFeatures,
+      matchupFeatures,
+    )
+    const executionTime = performance.now() - startTime
+    console.info('Advanced prediction completed', {
+      execution_time_ms: Math.round(executionTime),
+      confidence,
+      simulation_runs: AdvancedPredictionEngine.SIMULATION_RUNS,
+    })
+    // Legvalószínűbb eredmény meghatározása
+    const predictedScore = this.getPredictedScore(simulationResults)
+    return {
+      homeTeam,
+      awayTeam,
+      homeWinProbability: simulationResults.homeWinProbability,
+      drawProbability: simulationResults.drawProbability,
+      awayWinProbability: simulationResults.awayWinProbability,
+      expectedHomeGoals: simulationResults.expectedHomeGoals,
+      expectedAwayGoals: simulationResults.expectedAwayGoals,
+      predictedScore,
+      confidence,
+      statistics,
+      metadata: {
+        algorithmVersion: '3.0-advanced',
+        simulationRuns: AdvancedPredictionEngine.SIMULATION_RUNS,
+        executionTimeMs: Math.round(executionTime),
+        featuresUsed: Object.keys(AdvancedPredictionEngine.FEATURE_WEIGHTS),
+        confidenceIntervals: simulationResults.confidenceIntervals,
+      },
+    }
+  }
+  private extractTeamFeatures(teamName: string, isHome: boolean): TeamFeatures {
+    const teamStat = AdvancedPredictionEngine.teamStats[teamName] || {
+      wins: 0,
+      draws: 0,
+      losses: 0,
+      goalsFor: 0,
+      goalsAgainst: 0,
+      matchesPlayed: 0,
+      form: [],
+      secondHalfPerformance: '0',
+      comebackAbility: 'Low',
+      leadProtection: '0%',
+      homeGoalsAvg: 0,
+      homeConcededAvg: 0,
+      awayGoalsAvg: 0,
+      awayConcededAvg: 0,
+    }
+    const formIndex = this.calculateFormIndex(teamStat.form)
+    return {
+      basicStats: {
+        matchesPlayed: teamStat.matchesPlayed,
+        winPercentage: (teamStat.wins / teamStat.matchesPlayed) * 100,
+        goalsForAvg: teamStat.goalsFor / teamStat.matchesPlayed,
+        goalsAgainstAvg: teamStat.goalsAgainst / teamStat.matchesPlayed,
+        goalDifference: teamStat.goalsFor - teamStat.goalsAgainst,
+      },
+      formMetrics: {
+        formIndex,
+        recentFormTrend: this.calculateFormTrend(teamStat.form),
+        momentumScore: this.calculateMomentum(teamStat.form),
+      },
+      venuePerformance: {
+        homeGoalsAvg: teamStat.homeGoalsAvg || 0,
+        homeConcededAvg: teamStat.homeConcededAvg || 0,
+        awayGoalsAvg: teamStat.awayGoalsAvg || 0,
+        awayConcededAvg: teamStat.awayConcededAvg || 0,
+      },
+      advancedMetrics: {
+        consistencyScore: this.calculateConsistency(teamStat.form),
+        pressureHandling: this.calculatePressureHandling(teamStat),
+        scoringEfficiency: this.calculateScoringEfficiency(teamStat),
+      },
+    }
+  }
+  private extractMatchupFeatures(
+    homeTeam: string,
+    awayTeam: string,
+  ): MatchupFeatures {
+    const teams = [homeTeam, awayTeam].sort()
+    const h2hKey = `${teams[0]}-${teams[1]}`
+    const h2hStats = AdvancedPredictionEngine.h2hRecords[h2hKey] || {
+      team1Wins: 0,
+      draws: 0,
+      team2Wins: 0,
+      lastMatches: [],
+    }
+    return {
+      headToHead: h2hStats,
+      styleMatchup: this.analyzeStyleMatchup(homeTeam, awayTeam),
+      historicalTrends: this.analyzeHistoricalTrends(h2hStats),
+      competitiveBalance: this.calculateCompetitiveBalance(h2hStats),
+    }
+  }
+  private calculateTeamStrength(features: TeamFeatures): number {
+    let strength = 0.0
+    // Recent form contribution
+    const formContribution =
+      (features.formMetrics.formIndex / 100) *
+      AdvancedPredictionEngine.FEATURE_WEIGHTS.recent_form
+    strength += formContribution
+    // Goal difference contribution
+    const goalDiffNormalized = Math.max(
+      -1,
+      Math.min(1, features.basicStats.goalDifference / 20),
+    )
+    const goalDiffContribution =
+      goalDiffNormalized *
+      AdvancedPredictionEngine.FEATURE_WEIGHTS.goal_difference
+    strength += goalDiffContribution
+    // Momentum contribution
+    const momentumContribution =
+      features.formMetrics.momentumScore *
+      AdvancedPredictionEngine.FEATURE_WEIGHTS.momentum
+    strength += momentumContribution
+    // Seasonal trend contribution
+    const trendContribution =
+      features.formMetrics.recentFormTrend *
+      AdvancedPredictionEngine.FEATURE_WEIGHTS.seasonal_trend
+    strength += trendContribution
+    return Math.max(0.1, Math.min(2.0, strength * 2))
+  }
+  private runMonteCarloSimulation(
+    homeStrength: number,
+    awayStrength: number,
+    matchupFeatures: MatchupFeatures,
+  ): any {
+    const results = {
+      homeWins: 0,
+      draws: 0,
+      awayWins: 0,
+      totalHomeGoals: 0,
+      totalAwayGoals: 0,
+      scores: {} as Record<string, number>,
+      confidenceIntervals: {},
+    }
+    // Alkalmazunk egy hazai előnyt
+    const homeAdvantage =
+      AdvancedPredictionEngine.FEATURE_WEIGHTS.home_advantage
+    const adjustedHomeStrength = homeStrength * (1 + homeAdvantage)
+    // Fejlesztett modell: H2H előzmények figyelembevétele
+    const h2hFactor = this.calculateH2HFactor(matchupFeatures.headToHead)
+    const finalHomeStrength = adjustedHomeStrength * h2hFactor.home
+    const finalAwayStrength = awayStrength * h2hFactor.away
+    // Poisson eloszlás alapú gólszimulációk
+    for (let i = 0; i < AdvancedPredictionEngine.SIMULATION_RUNS; i++) {
+      // Poisson eloszlású véletlenszám generálás az elvárt gólátlagok alapján
+      const homeGoals = this.generatePoissonRandom(finalHomeStrength)
+      const awayGoals = this.generatePoissonRandom(finalAwayStrength)
+      // Eredmény rögzítése
+      if (homeGoals > awayGoals) {
+        results.homeWins++
+      } else if (homeGoals === awayGoals) {
+        results.draws++
+      } else {
+        results.awayWins++
+      }
+      results.totalHomeGoals += homeGoals
+      results.totalAwayGoals += awayGoals
+      // Eredmény gyakoriság
+      const scoreKey = `${homeGoals}-${awayGoals}`
+      results.scores[scoreKey] = (results.scores[scoreKey] || 0) + 1
+    }
+    // Valószínűségek és várható értékek számítása
+    const homeWinProbability =
+      (results.homeWins / AdvancedPredictionEngine.SIMULATION_RUNS) * 100
+    const drawProbability =
+      (results.draws / AdvancedPredictionEngine.SIMULATION_RUNS) * 100
+    const awayWinProbability =
+      (results.awayWins / AdvancedPredictionEngine.SIMULATION_RUNS) * 100
+    const expectedHomeGoals =
+      results.totalHomeGoals / AdvancedPredictionEngine.SIMULATION_RUNS
+    const expectedAwayGoals =
+      results.totalAwayGoals / AdvancedPredictionEngine.SIMULATION_RUNS
+    // Konfidencia intervallumok számítása
+    results.confidenceIntervals = this.calculateConfidenceIntervals(
+      homeWinProbability,
+      drawProbability,
+      awayWinProbability,
+    )
+    return {
+      homeWinProbability,
+      drawProbability,
+      awayWinProbability,
+      expectedHomeGoals,
+      expectedAwayGoals,
+      scoreDistribution: results.scores,
+      confidenceIntervals: results.confidenceIntervals,
+    }
+  }
+  private calculateFormIndex(form: string[]): number {
+    // Súlyozott forma index számítása, ahol a legutóbbi mérkőzések nagyobb súlyt kapnak
+    const weights = [5, 4, 3, 2, 1] // Legutóbbi mérkőzés kap legnagyobb súlyt
+    let totalPoints = 0
+    let totalWeight = 0
+    form.forEach((result, index) => {
+      const weight = index < weights.length ? weights[index] : 1
+      totalWeight += weight
+      if (result === 'W') {
+        totalPoints += weight * 3
+      } else if (result === 'D') {
+        totalPoints += weight * 1
+      }
+    })
+    return (totalPoints / (totalWeight * 3)) * 100
+  }
+  private calculateFormTrend(form: string[]): number {
+    // Forma trend számítása: pozitív vagy negatív irány
+    if (form.length < 3) return 0
+    // Korai forma (régebbi mérkőzések)
+    const earlyForm = form.slice(-3)
+    const earlyPoints = earlyForm.reduce((sum, result) => {
+      return sum + (result === 'W' ? 3 : result === 'D' ? 1 : 0)
+    }, 0)
+    // Késői forma (legutóbbi mérkőzések)
+    const lateForm = form.slice(0, 3)
+    const latePoints = lateForm.reduce((sum, result) => {
+      return sum + (result === 'W' ? 3 : result === 'D' ? 1 : 0)
+    }, 0)
+    // Normalizált trend -1 és 1 között
+    return (latePoints - earlyPoints) / 9 // Max különbség: 9 pont (3 győzelem vs 3 vereség)
+  }
+  private calculateMomentum(form: string[]): number {
+    // Momentum: legutóbbi mérkőzések alapján
+    if (form.length === 0) return 0
+    // Az utolsó 3 mérkőzés vizsgálata (ha van ennyi)
+    const recentMatches = form.slice(0, Math.min(3, form.length))
+    let momentum = 0
+    // Győzelmek sorozata növeli, vereségek csökkentik a momentumot
+    recentMatches.forEach((result, index) => {
+      const factor = 1 - index * 0.2 // Csökkenő súlyozás
+      if (result === 'W') momentum += factor
+      else if (result === 'L') momentum -= factor
+      // Döntetlen nem változtatja a momentumot
+    })
+    return Math.max(-1, Math.min(1, momentum / 3))
+  }
+  private calculateConsistency(form: string[]): number {
+    if (form.length < 3) return 0.5
+    // Változékonyság mérése: mennyire váltakoznak az eredmények
+    let changes = 0
+    for (let i = 1; i < form.length; i++) {
+      if (form[i] !== form[i - 1]) {
+        changes++
+      }
+    }
+    // Normalizálás 0-1 skálára, ahol 1 a legkonzisztensebb
+    return 1 - changes / (form.length - 1)
+  }
+  private calculatePressureHandling(teamStats: any): number {
+    // Nyomás kezelése: comebackAbility és leadProtection alapján
+    let score = 0.5 // Alapértelmezett érték
+    if (teamStats.comebackAbility === 'High') score += 0.3
+    else if (teamStats.comebackAbility === 'Medium') score += 0.15
+    else if (teamStats.comebackAbility === 'Low') score -= 0.15
+    else if (teamStats.comebackAbility === 'Very Low') score -= 0.3
+    // Lead protection percentage to number
+    const leadProtection =
+      parseFloat(teamStats.leadProtection.replace('%', '')) / 100
+    score += (leadProtection - 0.5) * 0.4 // Normalizálás
+    return Math.max(0, Math.min(1, score))
+  }
+  private calculateScoringEfficiency(teamStats: any): number {
+    // Gólszerzési hatékonyság: gólarány a lövésekhez képest (becsült érték)
+    const goalsPerMatch = teamStats.goalsFor / teamStats.matchesPlayed
+    // Becslés: átlagos csapat 12 lövést ad le meccsenként
+    const estimatedShots = 12
+    // Hatékonyság: gólok / lövések (normalizálva)
+    return Math.min(1, goalsPerMatch / (estimatedShots * 0.15)) // 15% az átlagos konverzió
+  }
+  private analyzeStyleMatchup(homeTeam: string, awayTeam: string): any {
+    // Játékstílus összevetése (egyszerűsített)
+    const homeStats = AdvancedPredictionEngine.teamStats[homeTeam]
+    const awayStats = AdvancedPredictionEngine.teamStats[awayTeam]
+    if (!homeStats || !awayStats) {
+      return {
+        possessionDominance: 'unknown',
+        attackingStyles: 'unknown',
+        defensiveOrganization: 'unknown',
+      }
+    }
+    // Birtoklási dominancia
+    let possessionDominance = 'balanced'
+    if (homeStats.goalsFor > awayStats.goalsFor + 5) {
+      possessionDominance = 'home dominant'
+    } else if (awayStats.goalsFor > homeStats.goalsFor + 5) {
+      possessionDominance = 'away dominant'
+    }
+    // Támadó stílusok
+    const homeAttacking =
+      homeStats.goalsFor / homeStats.matchesPlayed > 2
+        ? 'high-scoring'
+        : 'moderate'
+    const awayAttacking =
+      awayStats.goalsFor / awayStats.matchesPlayed > 2
+        ? 'high-scoring'
+        : 'moderate'
+    // Védekezési szervezettség
+    const homeDefense =
+      homeStats.goalsAgainst / homeStats.matchesPlayed < 1
+        ? 'solid'
+        : 'vulnerable'
+    const awayDefense =
+      awayStats.goalsAgainst / awayStats.matchesPlayed < 1
+        ? 'solid'
+        : 'vulnerable'
+    return {
+      possessionDominance,
+      attackingStyles: {
+        home: homeAttacking,
+        away: awayAttacking,
+      },
+      defensiveOrganization: {
+        home: homeDefense,
+        away: awayDefense,
+      },
+    }
+  }
+  private analyzeHistoricalTrends(h2hStats: any): any {
+    // Történelmi trendek elemzése
+    const totalMatches =
+      h2hStats.team1Wins + h2hStats.draws + h2hStats.team2Wins
+    if (totalMatches === 0) {
+      return {
+        dominantTeam: 'none',
+        recentTrend: 'none',
+        highScoring: false,
+      }
+    }
+    // Domináns csapat
+    let dominantTeam = 'none'
+    if (h2hStats.team1Wins > h2hStats.team2Wins * 2) {
+      dominantTeam = 'team1'
+    } else if (h2hStats.team2Wins > h2hStats.team1Wins * 2) {
+      dominantTeam = 'team2'
+    } else if (
+      h2hStats.draws > h2hStats.team1Wins &&
+      h2hStats.draws > h2hStats.team2Wins
+    ) {
+      dominantTeam = 'draws'
+    }
+    // Legutóbbi trend
+    const recentMatches = h2hStats.lastMatches.slice(0, 3)
+    const team1Wins = recentMatches.filter((r) => r === 'W').length
+    const team2Wins = recentMatches.filter((r) => r === 'L').length
+    const recentDraws = recentMatches.filter((r) => r === 'D').length
+    let recentTrend = 'balanced'
+    if (team1Wins > team2Wins + recentDraws) {
+      recentTrend = 'team1'
+    } else if (team2Wins > team1Wins + recentDraws) {
+      recentTrend = 'team2'
+    } else if (recentDraws > team1Wins && recentDraws > team2Wins) {
+      recentTrend = 'draws'
+    }
+    return {
+      dominantTeam,
+      recentTrend,
+      highScoring: false, // Egyszerűsített implementáció
+    }
+  }
+  private calculateCompetitiveBalance(h2hStats: any): number {
+    // Versenyegyensúly számítása
+    const totalMatches =
+      h2hStats.team1Wins + h2hStats.draws + h2hStats.team2Wins
+    if (totalMatches === 0) return 0.5
+    // Minél kiegyensúlyozottabb az egymás elleni mérleg, annál közelebb van 1-hez
+    const team1Ratio = h2hStats.team1Wins / totalMatches
+    const team2Ratio = h2hStats.team2Wins / totalMatches
+    const drawRatio = h2hStats.draws / totalMatches
+    // Ideális egyensúly: mindhárom kimenet közel egyenlő valószínűségű
+    const idealRatio = 1 / 3
+    const deviation =
+      Math.abs(team1Ratio - idealRatio) +
+      Math.abs(team2Ratio - idealRatio) +
+      Math.abs(drawRatio - idealRatio)
+    // Normalizálás 0-1 skálára, ahol 1 a tökéletes egyensúly
+    return 1 - deviation / 2
+  }
+  private calculateAdvancedConfidence(
+    homeFeatures: TeamFeatures,
+    awayFeatures: TeamFeatures,
+    matchupFeatures: MatchupFeatures,
+  ): number {
+    // Fejlett konfidencia számítás
+    const dataQualityFactor = 0.85 // Feltételezzük, hogy jó minőségű adataink vannak
+    // Forma konzisztencia
+    const homeConsistency = homeFeatures.advancedMetrics.consistencyScore
+    const awayConsistency = awayFeatures.advancedMetrics.consistencyScore
+    const consistencyFactor = (homeConsistency + awayConsistency) / 2
+    // Előzmény mennyiség
+    const h2hFactor =
+      matchupFeatures.headToHead.team1Wins +
+      matchupFeatures.headToHead.draws +
+      matchupFeatures.headToHead.team2Wins
+    const h2hConfidence = Math.min(1, h2hFactor / 10) // 10+ mérkőzés = maximális konfidencia
+    // Versenyegyensúly
+    const balanceFactor = 1 - Math.abs(0.5 - matchupFeatures.competitiveBalance)
+    // Súlyozott átlag
+    return (
+      dataQualityFactor * 0.3 +
+      consistencyFactor * 0.3 +
+      h2hConfidence * 0.25 +
+      balanceFactor * 0.15
+    )
+  }
+  private prepareAdvancedStatistics(
+    homeFeatures: TeamFeatures,
+    awayFeatures: TeamFeatures,
+    matchupFeatures: MatchupFeatures,
+  ): any {
+    // Részletes statisztikák előkészítése
+    return {
+      teamComparison: {
+        wins: {
+          home: homeFeatures.basicStats.winPercentage.toFixed(1) + '%',
+          away: awayFeatures.basicStats.winPercentage.toFixed(1) + '%',
+        },
+        goalsForAvg: {
+          home: homeFeatures.basicStats.goalsForAvg.toFixed(1),
+          away: awayFeatures.basicStats.goalsForAvg.toFixed(1),
+        },
+        goalsAgainstAvg: {
+          home: homeFeatures.basicStats.goalsAgainstAvg.toFixed(1),
+          away: awayFeatures.basicStats.goalsAgainstAvg.toFixed(1),
+        },
+        formIndex: {
+          home: homeFeatures.formMetrics.formIndex.toFixed(1),
+          away: awayFeatures.formMetrics.formIndex.toFixed(1),
+        },
+        momentum: {
+          home: this.getMomentumLabel(homeFeatures.formMetrics.momentumScore),
+          away: this.getMomentumLabel(awayFeatures.formMetrics.momentumScore),
+        },
+      },
+      headToHead: {
+        totalMatches:
+          matchupFeatures.headToHead.team1Wins +
+          matchupFeatures.headToHead.draws +
+          matchupFeatures.headToHead.team2Wins,
+        team1Wins: matchupFeatures.headToHead.team1Wins,
+        draws: matchupFeatures.headToHead.draws,
+        team2Wins: matchupFeatures.headToHead.team2Wins,
+        recentForm: matchupFeatures.headToHead.lastMatches,
+      },
+      styleAnalysis: matchupFeatures.styleMatchup,
+      keyMetrics: {
+        homeTeamStrengths: this.getTeamStrengths(homeFeatures),
+        awayTeamStrengths: this.getTeamStrengths(awayFeatures),
+        competitiveBalance:
+          (matchupFeatures.competitiveBalance * 100).toFixed(1) + '%',
+      },
+    }
+  }
+  private getMomentumLabel(momentumScore: number): string {
+    if (momentumScore > 0.7) return 'Very Strong'
+    if (momentumScore > 0.3) return 'Strong'
+    if (momentumScore > -0.3) return 'Neutral'
+    if (momentumScore > -0.7) return 'Weak'
+    return 'Very Weak'
+  }
+  private getTeamStrengths(features: TeamFeatures): string[] {
+    const strengths = []
+    if (features.basicStats.winPercentage > 60) {
+      strengths.push('High Win Rate')
+    }
+    if (features.basicStats.goalsForAvg > 2) {
+      strengths.push('Strong Attack')
+    }
+    if (features.basicStats.goalsAgainstAvg < 1) {
+      strengths.push('Solid Defense')
+    }
+    if (features.formMetrics.momentumScore > 0.5) {
+      strengths.push('Good Momentum')
+    }
+    if (features.advancedMetrics.consistencyScore > 0.7) {
+      strengths.push('Consistent Performance')
+    }
+    if (features.advancedMetrics.pressureHandling > 0.7) {
+      strengths.push('Handles Pressure Well')
+    }
+    return strengths.length > 0
+      ? strengths
+      : ['No significant strengths identified']
+  }
+  private calculateH2HFactor(h2hStats: any): { home: number; away: number } {
+    const totalMatches =
+      h2hStats.team1Wins + h2hStats.draws + h2hStats.team2Wins
+    if (totalMatches === 0) {
+      return { home: 1, away: 1 }
+    }
+    // Az egymás elleni mérleg alapján korrekciós tényező
+    const team1Ratio = h2hStats.team1Wins / totalMatches
+    const team2Ratio = h2hStats.team2Wins / totalMatches
+    // Korrekció: max 20% erősítés vagy gyengítés
+    const homeFactor = 1 + (team1Ratio - 0.33) * 0.4
+    const awayFactor = 1 + (team2Ratio - 0.33) * 0.4
+    return {
+      home: Math.max(0.8, Math.min(1.2, homeFactor)),
+      away: Math.max(0.8, Math.min(1.2, awayFactor)),
+    }
+  }
+  private calculateConfidenceIntervals(
+    homeWinProb: number,
+    drawProb: number,
+    awayWinProb: number,
+  ): any {
+    // Egyszerűsített konfidencia intervallumok
+    const margin = 5 // 5% hibahatár
+    return {
+      homeWin: {
+        lower: Math.max(0, homeWinProb - margin),
+        upper: Math.min(100, homeWinProb + margin),
+      },
+      draw: {
+        lower: Math.max(0, drawProb - margin),
+        upper: Math.min(100, drawProb + margin),
+      },
+      awayWin: {
+        lower: Math.max(0, awayWinProb - margin),
+        upper: Math.min(100, awayWinProb + margin),
+      },
+    }
+  }
+  private generatePoissonRandom(lambda: number): number {
+    // Poisson eloszlású véletlen szám generálás
+    const L = Math.exp(-lambda)
+    let k = 0
+    let p = 1
+    do {
+      k++
+      p *= Math.random()
+    } while (p > L && k < AdvancedPredictionEngine.MAX_GOALS_SIMULATION)
+    return k - 1
+  }
+  private getPredictedScore(simulationResults: any): string {
+    // A legvalószínűbb eredmény meghatározása
+    const scores = simulationResults.scoreDistribution
+    let maxFrequency = 0
+    let mostLikelyScore = '0-0'
+    for (const score in scores) {
+      if (scores[score] > maxFrequency) {
+        maxFrequency = scores[score]
+        mostLikelyScore = score
+      }
+    }
+    return mostLikelyScore
+  }
+}
+export const predictionEngine = new AdvancedPredictionEngine()
+
+```
+```types/football.ts
+export interface TeamStats {
+  wins: number
+  draws: number
+  losses: number
+  goalsFor: number
+  goalsAgainst: number
+  matchesPlayed: number
+  form: string[]
+  secondHalfPerformance: string
+  comebackAbility: string
+  leadProtection: string
+  homeGoalsAvg: number
+  homeConcededAvg: number
+  awayGoalsAvg: number
+  awayConcededAvg: number
+}
+export interface Match {
+  id: string
+  homeTeam: string
+  awayTeam: string
+  date: string
+  time: string
+  homeScore?: number
+  awayScore?: number
+  status: 'scheduled' | 'live' | 'finished'
+  venue: string
+  competition: string
+  matchday?: number
+}
+export interface MatchEvent {
+  minute: number
+  team: 'home' | 'away'
+  event: 'Goal' | 'Card' | 'Substitution' | 'Penalty' | 'VAR'
+  player: string
+  description?: string
+}
+export interface MatchPredictionData {
+  homeWinProbability: number
+  drawProbability: number
+  awayWinProbability: number
+  predictedScore: string
+  confidence: number
+}
+export interface TeamPerformance {
+  team: string
+  matches: number
+  wins: number
+  draws: number
+  losses: number
+  goalsFor: number
+  goalsAgainst: number
+  points: number
+  form: string[]
+}
+
+```
+```components/pages/LeagueOverview.tsx
+import React from 'react'
+import { TeamStatsTable } from '../virtualLeague/TeamStatsTable'
+import { BarChart, Activity, TrendingUp } from 'lucide-react'
+export function LeagueOverview() {
+  return (
+    <div className="space-y-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-2">
+          <div className="card">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-medium">League Table</h3>
+              <button className="btn-secondary text-sm py-1">
+                <BarChart className="w-4 h-4 mr-2" />
+                View Stats
+              </button>
+            </div>
+            <TeamStatsTable />
+          </div>
+        </div>
+        <div className="lg:col-span-1">
+          <div className="card mb-6">
+            <h3 className="text-lg font-medium mb-4">League Statistics</h3>
+            <div className="space-y-4">
+              <div>
+                <div className="flex items-center justify-between text-sm mb-1">
+                  <span className="text-text-secondary">
+                    Average Goals per Match
+                  </span>
+                  <span className="font-medium">2.7</span>
+                </div>
+                <div className="h-2 bg-background-hover rounded-full overflow-hidden">
+                  <div className="h-full w-[67%] bg-accent-blue rounded-full" />
+                </div>
+              </div>
+              <div>
+                <div className="flex items-center justify-between text-sm mb-1">
+                  <span className="text-text-secondary">Home Win Rate</span>
+                  <span className="font-medium">48%</span>
+                </div>
+                <div className="h-2 bg-background-hover rounded-full overflow-hidden">
+                  <div className="h-full w-[48%] bg-accent-green rounded-full" />
+                </div>
+              </div>
+              <div>
+                <div className="flex items-center justify-between text-sm mb-1">
+                  <span className="text-text-secondary">Draw Rate</span>
+                  <span className="font-medium">24%</span>
+                </div>
+                <div className="h-2 bg-background-hover rounded-full overflow-hidden">
+                  <div className="h-full w-[24%] bg-accent-yellow rounded-full" />
+                </div>
+              </div>
+              <div>
+                <div className="flex items-center justify-between text-sm mb-1">
+                  <span className="text-text-secondary">Away Win Rate</span>
+                  <span className="font-medium">28%</span>
+                </div>
+                <div className="h-2 bg-background-hover rounded-full overflow-hidden">
+                  <div className="h-full w-[28%] bg-accent-red rounded-full" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="card">
+            <h3 className="text-lg font-medium mb-4">Simulation Model</h3>
+            <div className="space-y-4">
+              <div className="p-3 border border-border rounded-lg">
+                <h4 className="font-medium mb-1">Poisson Distribution</h4>
+                <p className="text-sm text-text-secondary">
+                  Predicts the number of goals scored by each team based on
+                  their average scoring rate
+                </p>
+              </div>
+              <div className="p-3 border border-border rounded-lg">
+                <h4 className="font-medium mb-1">Bayesian Probability</h4>
+                <p className="text-sm text-text-secondary">
+                  Calculates match outcomes based on historical head-to-head
+                  results
+                </p>
+              </div>
+              <div className="p-3 border border-border rounded-lg">
+                <h4 className="font-medium mb-1">Half-time Analysis</h4>
+                <p className="text-sm text-text-secondary">
+                  Uses half-time scores to predict final match outcomes
+                </p>
+              </div>
+              <button className="btn-secondary w-full">
+                <TrendingUp className="w-4 h-4 mr-2" />
+                View Model Details
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+```
+```components/pages/TeamAnalysis.tsx
+import React, { useState } from 'react'
+import { TeamPerformanceChart } from '../virtualLeague/TeamPerformanceChart'
+import { ChevronDown, TrendingUp, Scale, History, Activity } from 'lucide-react'
+export function TeamAnalysis() {
+  return (
+    <div className="space-y-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-2">
+          <div className="card">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-medium">Team Performance</h3>
+              <div className="relative w-[200px]">
+                <select className="w-full bg-background border border-border rounded-lg px-3 py-2 text-sm appearance-none focus:outline-none focus:border-accent-blue">
+                  <option>All Teams</option>
+                  <option>Barcelona</option>
+                  <option>Madrid Fehér</option>
+                  <option>Girona</option>
+                  <option>Madrid Piros</option>
+                </select>
+                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-tertiary pointer-events-none" />
+              </div>
+            </div>
+            <TeamPerformanceChart />
+          </div>
+        </div>
+        <div className="lg:col-span-1">
+          <div className="card">
+            <h3 className="text-lg font-medium mb-4">Team Patterns</h3>
+            <div className="space-y-4">
+              <div className="p-3 border border-border rounded-lg">
+                <div className="flex items-center gap-2 mb-2">
+                  <TrendingUp className="w-4 h-4 text-accent-green" />
+                  <h4 className="font-medium">Momentum Teams</h4>
+                </div>
+                <ul className="text-sm text-text-secondary space-y-1">
+                  <li className="flex items-center justify-between">
+                    <span>Barcelona</span>
+                    <span className="text-accent-green">5 win streak</span>
+                  </li>
+                  <li className="flex items-center justify-between">
+                    <span>Girona</span>
+                    <span className="text-accent-green">3 win streak</span>
+                  </li>
+                </ul>
+              </div>
+              <div className="p-3 border border-border rounded-lg">
+                <div className="flex items-center gap-2 mb-2">
+                  <Scale className="w-4 h-4 text-accent-yellow" />
+                  <h4 className="font-medium">Draw Specialists</h4>
+                </div>
+                <ul className="text-sm text-text-secondary space-y-1">
+                  <li className="flex items-center justify-between">
+                    <span>San Sebastian</span>
+                    <span>40% draw rate</span>
+                  </li>
+                  <li className="flex items-center justify-between">
+                    <span>Sevilla Piros</span>
+                    <span>40% draw rate</span>
+                  </li>
+                </ul>
+              </div>
+              <div className="p-3 border border-border rounded-lg">
+                <div className="flex items-center gap-2 mb-2">
+                  <Activity className="w-4 h-4 text-accent-blue" />
+                  <h4 className="font-medium">Half-time Teams</h4>
+                </div>
+                <ul className="text-sm text-text-secondary space-y-1">
+                  <li className="flex items-center justify-between">
+                    <span>Barcelona</span>
+                    <span className="text-accent-blue">Strong 1st half</span>
+                  </li>
+                  <li className="flex items-center justify-between">
+                    <span>Girona</span>
+                    <span className="text-accent-green">Strong 2nd half</span>
+                  </li>
+                </ul>
+              </div>
+              <div className="p-3 border border-border rounded-lg">
+                <div className="flex items-center gap-2 mb-2">
+                  <History className="w-4 h-4 text-accent-red" />
+                  <h4 className="font-medium">Thriller Factor</h4>
+                </div>
+                <ul className="text-sm text-text-secondary space-y-1">
+                  <li className="flex items-center justify-between">
+                    <span>Barcelona</span>
+                    <span>3.4 goals/match</span>
+                  </li>
+                  <li className="flex items-center justify-between">
+                    <span>Villarreal</span>
+                    <span>3.2 goals/match</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+```
+```components/pages/MatchPredictions.tsx
+import React from 'react'
+import { MatchPrediction } from '../virtualLeague/MatchPrediction'
+import { UpcomingMatches } from '../virtualLeague/UpcomingMatches'
+import { LiveScores } from '../matches/LiveScores'
+export function MatchPredictions() {
+  return (
+    <div className="space-y-6">
+      <div className="card">
+        <h3 className="text-lg font-medium mb-4">Next Match Prediction</h3>
+        <MatchPrediction
+          team1="Barcelona"
+          team2="Madrid Fehér"
+          team1Win={45}
+          draw={30}
+          team2Win={25}
+          predictedScore="2-1"
+        />
+      </div>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="card">
+          <h3 className="text-lg font-medium mb-4">Upcoming Matches</h3>
+          <UpcomingMatches />
+        </div>
+        <div>
+          <LiveScores />
+        </div>
+      </div>
+    </div>
+  )
+}
+
+```
+```components/pages/TeamComparisonPage.tsx
+import React from 'react'
+import { TeamComparison } from '../virtualLeague/TeamComparison'
+export function TeamComparisonPage() {
+  return (
+    <div className="space-y-6">
+      <TeamComparison />
+    </div>
+  )
+}
+
+```
+```components/pages/MatchHistoryPage.tsx
+import React from 'react'
+import { MatchAnalysis } from '../virtualLeague/MatchAnalysis'
+import { BettingHistory } from '../stats/BettingHistory'
+export function MatchHistoryPage() {
+  return (
+    <div className="space-y-6">
+      <MatchAnalysis />
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-1">
+          <BettingHistory />
+        </div>
+      </div>
+    </div>
+  )
+}
+
+```
